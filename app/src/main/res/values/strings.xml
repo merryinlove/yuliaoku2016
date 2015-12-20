@@ -1,3 +1,9 @@
 <resources>
-    <string name="app_name">yuliaoku</string>
+    <string name="app_name">语料库</string>
+    <string name="motto">新起点，新征程</string>
+    <string name="start_unzip">开始解压缩…</string>
+    <string name="initial">首次安装需要初始化一些数据</string>
+    <string name="finished">解压已完成:%1$d</string>
+    <string name="unzip_success">解压成功</string>
+    <string name="unzip_failure">解压失败,2s后退出…</string>
 </resources>
