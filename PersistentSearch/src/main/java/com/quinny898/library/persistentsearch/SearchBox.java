@@ -2,6 +2,10 @@ package com.quinny898.library.persistentsearch;
 
 import android.animation.LayoutTransition;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.text.Editable;
@@ -57,6 +61,7 @@ public class SearchBox extends RelativeLayout {
     private SearchFilter mSearchFilter;
     private ArrayAdapter<? extends SearchResult> mAdapter;
     private boolean showCamera = true;
+    private Drawable mic;
 
 
     /**
@@ -96,6 +101,11 @@ public class SearchBox extends RelativeLayout {
         this.context = context;
         this.camera = (ImageView) findViewById(R.id.camera);
         this.drawerLogo = (ImageView) findViewById(R.id.drawer_logo);
+
+        mic = getResources().getDrawable(R.drawable.ic_action_mic);
+        mic.setColorFilter(Color.parseColor("#808080"), PorterDuff.Mode.SRC_ATOP);
+        camera.setImageDrawable(mic);
+
         materialMenu.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -152,10 +162,9 @@ public class SearchBox extends RelativeLayout {
         camera.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-//                if (voiceRecognitionListener != null) {
-//                    voiceRecognitionListener.onClick();
-//                }
-                Log.d("YOSEMITE","onclick"+showCamera);
+                if (voiceRecognitionListener != null) {
+                    voiceRecognitionListener.onClick();
+                }
                 if (!showCamera){
                     setSearchString("");
                 }
@@ -175,8 +184,7 @@ public class SearchBox extends RelativeLayout {
                     updateResults();
                 } else {
                     shouldShowCamera(true);
-                    camera.setImageDrawable(getContext().getResources().getDrawable(
-                            R.drawable.ic_action_mic));
+                    camera.setImageDrawable(mic);
                     showCamera = true;
                     if (initialResults != null) {
                         setInitialResults();
@@ -223,6 +231,7 @@ public class SearchBox extends RelativeLayout {
             openSearch(true);
         }
         shouldShowCamera(true);
+        showCamera = false;
     }
 
 
@@ -238,12 +247,6 @@ public class SearchBox extends RelativeLayout {
         this.results.setVisibility(View.GONE);
     }
 
-    /***
-     * Enable voice recognition for Fragment
-     */
-    public void enableVoiceRecognition() {
-        shouldShowCamera(true);
-    }
 
     private void shouldShowCamera(boolean isCamera) {
         showCamera = isCamera;
@@ -616,8 +619,7 @@ public class SearchBox extends RelativeLayout {
         if (listener != null)
             listener.onSearchClosed();
         shouldShowCamera(true);
-        camera.setImageDrawable(context.getResources().getDrawable(
-                R.drawable.ic_action_mic));
+        camera.setImageDrawable(mic);
         InputMethodManager inputMethodManager = (InputMethodManager) context
                 .getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(getApplicationWindowToken(),

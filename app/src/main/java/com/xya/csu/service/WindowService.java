@@ -17,6 +17,7 @@ import com.xya.csu.yuliaoku.R;
 public class WindowService extends Service {
 
     private WindowManager wm;
+    private WindowManager.LayoutParams layoutParams;
     private View content;
     private SearchBox searchBox;
 
@@ -27,46 +28,43 @@ public class WindowService extends Service {
 
     @Override
     public void onCreate() {
-        super.onCreate();
-    }
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
         wm = (WindowManager) getSystemService(WINDOW_SERVICE);
         int w = WindowManager.LayoutParams.MATCH_PARENT;
         int h = WindowManager.LayoutParams.WRAP_CONTENT;
 
         int flag = 0;
-        int type = 0;
+        int type;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             type = WindowManager.LayoutParams.TYPE_TOAST;
         } else {
             type = WindowManager.LayoutParams.TYPE_PHONE;
         }
-        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams(w, h, type, flags, PixelFormat.TRANSLUCENT);
+        layoutParams = new WindowManager.LayoutParams(w, h, type, flag, PixelFormat.TRANSLUCENT);
         layoutParams.gravity = Gravity.TOP;
         //inflater view
         content = View.inflate(WindowService.this, R.layout.service_main, null);
         searchBox = (SearchBox) content.findViewById(R.id.searchbox);
-        searchBox.enableVoiceRecognition();
-        wm.addView(content, layoutParams);
-
         content.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-
                 int x = (int) event.getX();
                 int y = (int) event.getY();
-
                 Rect rect = new Rect();
                 searchBox.getGlobalVisibleRect(rect);
-                if (!rect.contains(x,y)){
+                if (!rect.contains(x, y)) {
                     stopSelf();
                 }
-                return false;
+                return true;
             }
         });
+
+        super.onCreate();
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        wm.addView(content, layoutParams);
         return super.onStartCommand(intent, flags, startId);
     }
 
