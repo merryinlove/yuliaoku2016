@@ -4,12 +4,13 @@
     android:layout_height="72dp"
     android:background="@mipmap/search_bg"
     android:orientation="vertical"
+    android:id="@+id/menu"
     android:gravity="center_vertical">
 
     <ImageView
         android:layout_width="24dp"
         android:layout_height="24dp"
-        android:id="@+id/imageView"
+        android:id="@+id/camera"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
@@ -19,7 +20,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="语料库 最棒的专业词典"
+        android:text="@string/widget_motto"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
         android:textColor="#9e9e9e"
@@ -28,7 +29,6 @@
     <ImageView
         android:layout_width="24dp"
         android:layout_height="24dp"
-        android:id="@+id/imageView2"
         android:src="@mipmap/menu"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:layout_centerVertical="true"

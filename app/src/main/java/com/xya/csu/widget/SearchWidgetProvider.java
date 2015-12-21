@@ -1,11 +1,13 @@
 package com.xya.csu.widget;
 
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.widget.RemoteViews;
 
+import com.xya.csu.camera.CaptureActivity;
 import com.xya.csu.yuliaoku.R;
 
 /**
@@ -31,9 +33,14 @@ public class SearchWidgetProvider extends AppWidgetProvider{
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_search);
         //启动camera取词
-        //remoteViews.setOnClickPendingIntent();
+        Intent camera = new Intent(context, CaptureActivity.class);
+        PendingIntent cameraPending = PendingIntent.getActivity(context,0,camera,0);
+        remoteViews.setOnClickPendingIntent(R.id.camera,cameraPending);
         //启动search
-        //Intent search = new Intent(context,)
+        Intent search = new Intent(context,WidgetActivity.class);
+        PendingIntent searchPending = PendingIntent.getActivity(context,0,search,0);
+        remoteViews.setOnClickPendingIntent(R.id.menu,searchPending);
+        appWidgetManager.updateAppWidget(appWidgetIds,remoteViews);
         super.onUpdate(context, appWidgetManager, appWidgetIds);
     }
 }
