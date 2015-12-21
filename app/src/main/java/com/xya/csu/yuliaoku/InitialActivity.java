@@ -7,6 +7,8 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
+import com.xya.csu.service.WindowService;
+
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -34,19 +36,18 @@ public class InitialActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_initialize);
-
-        initTextView = (TextView) findViewById(R.id.loadingTextView);
 
         //检查是否已经拷贝asset
         external_path = getFilesDir().getAbsolutePath();
         File dictionary = new File(external_path, OXFORD);
         if (dictionary.exists()) {
             //已初始化完成
-            Intent intent = new Intent(InitialActivity.this, MainActivity.class);
-            startActivity(intent);
+            Intent intent = new Intent(InitialActivity.this, WindowService.class);
+            startService(intent);
             finish();
         } else {
+            setContentView(R.layout.activity_initialize);
+            initTextView = (TextView) findViewById(R.id.loadingTextView);
             //初始化
             new Handler().postDelayed(new Runnable() {
                 @Override
@@ -65,8 +66,8 @@ public class InitialActivity extends AppCompatActivity {
                                 if (result) {
                                     //已初始化完成
                                     initTextView.setText(getString(R.string.unzip_success));
-                                    Intent intent = new Intent(InitialActivity.this, MainActivity.class);
-                                    startActivity(intent);
+                                    Intent intent = new Intent(InitialActivity.this, WindowService.class);
+                                    startService(intent);
                                     finish();
                                 } else {
                                     initTextView.setText(getString(R.string.unzip_failure));
