@@ -28,20 +28,18 @@ public class WindowService extends Service {
 
     @Override
     public void onCreate() {
-        wm = (WindowManager) getSystemService(WINDOW_SERVICE);
-        int w = WindowManager.LayoutParams.MATCH_PARENT;
-        int h = WindowManager.LayoutParams.WRAP_CONTENT;
 
-        int flag = 0;
-        int type;
+        //初始话刚打开时的自动完成提示
+        initData();
+        //初始化windowManager窗口
+        initWm();
+        //初始化显示的View
+        initView();
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            type = WindowManager.LayoutParams.TYPE_TOAST;
-        } else {
-            type = WindowManager.LayoutParams.TYPE_PHONE;
-        }
-        layoutParams = new WindowManager.LayoutParams(w, h, type, flag, PixelFormat.TRANSLUCENT);
-        layoutParams.gravity = Gravity.TOP;
+        super.onCreate();
+    }
+
+    private void initView() {
         //inflater view
         content = View.inflate(WindowService.this, R.layout.service_main, null);
         searchBox = (SearchBox) content.findViewById(R.id.searchbox);
@@ -58,8 +56,29 @@ public class WindowService extends Service {
                 return true;
             }
         });
+    }
 
-        super.onCreate();
+    private void initData() {
+        //数据来源于历史记录取搜索次数最高的前5条，否则按照时间取最近搜索
+
+
+    }
+
+    private void initWm() {
+        wm = (WindowManager) getSystemService(WINDOW_SERVICE);
+        int w = WindowManager.LayoutParams.MATCH_PARENT;
+        int h = WindowManager.LayoutParams.WRAP_CONTENT;
+
+        int flag = 0;
+        int type;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            type = WindowManager.LayoutParams.TYPE_TOAST;
+        } else {
+            type = WindowManager.LayoutParams.TYPE_PHONE;
+        }
+        layoutParams = new WindowManager.LayoutParams(w, h, type, flag, PixelFormat.TRANSLUCENT);
+        layoutParams.gravity = Gravity.TOP;
     }
 
     @Override
