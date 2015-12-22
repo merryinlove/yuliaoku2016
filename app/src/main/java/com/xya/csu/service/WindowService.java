@@ -12,7 +12,11 @@ import android.view.View;
 import android.view.WindowManager;
 
 import com.quinny898.library.persistentsearch.SearchBox;
+import com.quinny898.library.persistentsearch.SearchResult;
+import com.xya.csu.database.HistoryDatabaseHelper;
 import com.xya.csu.yuliaoku.R;
+
+import java.util.List;
 
 public class WindowService extends Service {
 
@@ -20,6 +24,8 @@ public class WindowService extends Service {
     private WindowManager.LayoutParams layoutParams;
     private View content;
     private SearchBox searchBox;
+
+    private List<String> history;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -56,12 +62,48 @@ public class WindowService extends Service {
                 return true;
             }
         });
+        for (String his: history) {
+            searchBox.addSearchable(new SearchResult(his,getResources().getDrawable(R.mipmap.ic_history)));
+        }
+        searchBox.setSearchListener(new SearchBox.SearchListener() {
+            @Override
+            public void onSearchOpened() {
+
+            }
+
+            @Override
+            public void onSearchCleared() {
+
+            }
+
+            @Override
+            public void onSearchClosed() {
+
+            }
+
+            @Override
+            public void onSearchTermChanged(String term) {
+
+            }
+
+            @Override
+            public void onSearch(String result) {
+
+            }
+
+            @Override
+            public void onResultClick(SearchResult result) {
+
+            }
+        });
+
     }
 
     private void initData() {
-        //数据来源于历史记录取搜索次数最高的前5条，否则按照时间取最近搜索
 
-
+        //数据来源于按照时间取最近搜索前5条，否则
+        HistoryDatabaseHelper databaseHelper = new HistoryDatabaseHelper(this);
+        history = databaseHelper.queryData();
     }
 
     private void initWm() {

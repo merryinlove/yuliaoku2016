@@ -56,6 +56,7 @@ public class HistoryDatabaseHelper extends SQLiteOpenHelper {
         while (cursor.moveToNext()){
             data.add(cursor.getString(cursor.getColumnIndex("_value")));
         }
+        cursor.close();
         return data;
     }
 
@@ -81,6 +82,7 @@ public class HistoryDatabaseHelper extends SQLiteOpenHelper {
         while (cursor.moveToNext()){
             return cursor.getString(cursor.getColumnIndex("_value"));
         }
+        cursor.close();
         return "";
     }
 

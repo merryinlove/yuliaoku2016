@@ -29,7 +29,7 @@ public class InitialActivity extends AppCompatActivity {
 
     public static final String OXFORD = "Oxford.dict";
 
-    private String external_path;
+    public static String external_path;
 
     private TextView initTextView;
 
