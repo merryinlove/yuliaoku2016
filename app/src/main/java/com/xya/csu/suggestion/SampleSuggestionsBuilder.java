@@ -2,6 +2,8 @@ package com.xya.csu.suggestion;
 
 import android.content.Context;
 
+import com.xya.csu.database.HistoryDatabaseHelper;
+
 import org.cryse.widget.persistentsearch.SearchItem;
 import org.cryse.widget.persistentsearch.SearchSuggestionsBuilder;
 
@@ -19,30 +21,16 @@ public class SampleSuggestionsBuilder implements SearchSuggestionsBuilder {
     }
 
     private void createHistorys() {
-        SearchItem item1 = new SearchItem(
-                "Isaac Newton",
-                "Isaac Newton",
-                SearchItem.TYPE_SEARCH_ITEM_HISTORY
-        );
-        mHistorySuggestions.add(item1);
-        SearchItem item2 = new SearchItem(
-                "Albert Einstein",
-                "Albert Einstein",
-                SearchItem.TYPE_SEARCH_ITEM_HISTORY
-        );
-        mHistorySuggestions.add(item2);
-        SearchItem item3 = new SearchItem(
-                "John von Neumann",
-                "John von Neumann",
-                SearchItem.TYPE_SEARCH_ITEM_HISTORY
-        );
-        mHistorySuggestions.add(item3);
-        SearchItem item4 = new SearchItem(
-                "Alan Mathison Turing",
-                "Alan Mathison Turing",
-                SearchItem.TYPE_SEARCH_ITEM_HISTORY
-        );
-        mHistorySuggestions.add(item4);
+        HistoryDatabaseHelper helper = new HistoryDatabaseHelper(mContext);
+        List<String> datas = helper.queryData();
+        for (String data:datas) {
+            SearchItem item = new SearchItem(
+                    data,
+                    data,
+                    SearchItem.TYPE_SEARCH_ITEM_HISTORY
+            );
+            mHistorySuggestions.add(item);
+        }
     }
 
     @Override
@@ -56,32 +44,38 @@ public class SampleSuggestionsBuilder implements SearchSuggestionsBuilder {
     public Collection<SearchItem> buildSearchSuggestion(int maxCount, String query) {
         List<SearchItem> items = new ArrayList<SearchItem>();
         if(query.startsWith("@")) {
-            SearchItem peopleSuggestion = new SearchItem(
-                    "Search People: " + query.substring(1),
+            SearchItem yuliaokuSuggestion = new SearchItem(
+                    "搜索语料库: " + query.substring(1),
                     query,
                     SearchItem.TYPE_SEARCH_ITEM_SUGGESTION
             );
-            items.add(peopleSuggestion);
+            items.add(yuliaokuSuggestion);
         } else if(query.startsWith("#")) {
-            SearchItem toppicSuggestion = new SearchItem(
-                    "Search Topic: " + query.substring(1),
+            SearchItem allSuggestion = new SearchItem(
+                    "搜索全部: " + query.substring(1),
                     query,
                     SearchItem.TYPE_SEARCH_ITEM_SUGGESTION
             );
-            items.add(toppicSuggestion);
+            items.add(allSuggestion);
         } else {
-            SearchItem peopleSuggestion = new SearchItem(
-                    "Search People: " + query,
+            SearchItem yuliaokuSuggestion = new SearchItem(
+                    "搜索语料库: " + query,
                     "@" + query,
                     SearchItem.TYPE_SEARCH_ITEM_SUGGESTION
             );
-            items.add(peopleSuggestion);
-            SearchItem toppicSuggestion = new SearchItem(
-                    "Search Topic: " + query,
+            items.add(yuliaokuSuggestion);
+            SearchItem allSuggestion = new SearchItem(
+                    "搜索全部: " + query,
                     "#" + query,
                     SearchItem.TYPE_SEARCH_ITEM_SUGGESTION
             );
-            items.add(toppicSuggestion);
+            items.add(allSuggestion);
+            SearchItem keySuggestion = new SearchItem(
+                    "搜索："+query,
+                    query,
+                    SearchItem.TYPE_SEARCH_ITEM_SUGGESTION
+            );
+            items.add(keySuggestion);
         }
         for(SearchItem item : mHistorySuggestions) {
             if(item.getValue().startsWith(query)) {
