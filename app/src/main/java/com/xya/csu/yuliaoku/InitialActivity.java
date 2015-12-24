@@ -7,8 +7,6 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
-import com.xya.csu.service.WindowService;
-
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -42,8 +40,8 @@ public class InitialActivity extends AppCompatActivity {
         File dictionary = new File(external_path, OXFORD);
         if (dictionary.exists()) {
             //已初始化完成
-            Intent intent = new Intent(InitialActivity.this, WindowService.class);
-            startService(intent);
+            Intent intent = new Intent(InitialActivity.this, WidgetActivity.class);
+            startActivity(intent);
             finish();
         } else {
             setContentView(R.layout.activity_initialize);
@@ -66,8 +64,8 @@ public class InitialActivity extends AppCompatActivity {
                                 if (result) {
                                     //已初始化完成
                                     initTextView.setText(getString(R.string.unzip_success));
-                                    Intent intent = new Intent(InitialActivity.this, WindowService.class);
-                                    startService(intent);
+                                    Intent intent = new Intent(InitialActivity.this, WidgetActivity.class);
+                                    startActivity(intent);
                                     finish();
                                 } else {
                                     initTextView.setText(getString(R.string.unzip_failure));

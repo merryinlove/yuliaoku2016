@@ -1,4 +1,4 @@
-package com.xya.csu.camera;
+package com.xya.csu.yuliaoku;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

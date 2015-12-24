@@ -21,8 +21,6 @@
             </intent-filter>
         </activity>
 
-        <service android:name="com.xya.csu.service.WindowService" />
-
         <receiver android:name="com.xya.csu.widget.SearchWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -34,9 +32,9 @@
         </receiver>
 
         <activity
-            android:name="com.xya.csu.widget.WidgetActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <activity android:name="com.xya.csu.camera.CaptureActivity" />
+            android:name=".WidgetActivity"
+            android:theme="@style/AppTheme.TransParent" />
+        <activity android:name=".CaptureActivity" />
     </application>
 
 </manifest>

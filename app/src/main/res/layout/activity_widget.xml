@@ -2,11 +2,21 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/widgetColor">
-    <com.quinny898.library.persistentsearch.SearchBox
-        android:layout_width="wrap_content"
-        android:id="@+id/searchbox"
+
+    <org.cryse.widget.persistentsearch.PersistentSearchView
+        android:id="@+id/searchview"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true" />
+        android:layout_alignParentTop="true"
+        android:elevation="4dp"
+        app:persistentSV_customToolbarHeight="64dp"
+        app:persistentSV_displayMode="toolbar"
+        app:persistentSV_editHintText="Search"
+        app:persistentSV_editHintTextColor="?android:textColorHint"
+        app:persistentSV_editTextColor="?android:textColorPrimary"
+        app:persistentSV_homeButtonMode="burger"
+        app:persistentSV_searchCardElevation="2dp"
+        app:persistentSV_searchTextColor="?android:textColorPrimary" />
 </RelativeLayout>
