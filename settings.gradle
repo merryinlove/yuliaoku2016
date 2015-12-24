@@ -1,1 +1,1 @@
-include ':app','PersistentSearch'
+include ':app','persistentsearchview'
