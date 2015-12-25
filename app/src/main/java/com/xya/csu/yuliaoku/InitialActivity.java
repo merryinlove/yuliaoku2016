@@ -25,7 +25,7 @@ public class InitialActivity extends AppCompatActivity {
     }
 
 
-    public static final String OXFORD = "Oxford.dict";
+    public static final String OXFORD = "dict.dat";
 
     public static String external_path;
 
@@ -78,7 +78,7 @@ public class InitialActivity extends AppCompatActivity {
                                 }
                             }
                         });
-                        unzipTask.execute(getResources().getAssets().open("Oxford.dict.zip"));
+                        unzipTask.execute(getResources().getAssets().open("dict.dat.zip"));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
