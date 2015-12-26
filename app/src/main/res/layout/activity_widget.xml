@@ -19,4 +19,25 @@
         app:persistentSV_homeButtonMode="burger"
         app:persistentSV_searchCardElevation="2dp"
         app:persistentSV_searchTextColor="?android:textColorPrimary" />
+    <com.xya.csu.view.RecyclerViewWrapper
+        android:id="@+id/card_view"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/searchview" />
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/empty_view"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_below="@+id/searchview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:src="@mipmap/empty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </android.support.v7.widget.CardView>
 </RelativeLayout>

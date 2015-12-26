@@ -2,19 +2,35 @@ package com.xya.csu.yuliaoku;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.text.Layout;
+import android.view.View;
 
 import com.xya.csu.suggestion.SuggestBuilder;
+import com.xya.csu.view.RecyclerViewWrapper;
 
 import org.cryse.widget.persistentsearch.PersistentSearchView;
+
+import java.util.List;
 
 public class WidgetActivity extends AppCompatActivity {
 
     private PersistentSearchView mSearchView;
+    private RecyclerViewWrapper mRecyclerView;
+    private List<Object> dict;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_widget);
+
+        mRecyclerView = (RecyclerViewWrapper) findViewById(R.id.card_view);
+        mRecyclerView.setHasFixedSize(true);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.setEmptyView(findViewById(R.id.empty_view));
+
 
         mSearchView = (PersistentSearchView) findViewById(R.id.searchview);
         mSearchView.setSuggestionBuilder(new SuggestBuilder(this));
