@@ -14,17 +14,17 @@ import java.util.List;
 /**
  * Created by jianglei on 15/12/22.
  */
-public class HistoryDatabaseHelper extends SQLiteOpenHelper {
+public class HistoryHelper extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "_search_history";
     public static final String TABLE_NAME = "_history";
     public static final int DATABASE_VERSION = 1;
 
-    public HistoryDatabaseHelper(Context context) {
+    public HistoryHelper(Context context) {
         this(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-    public HistoryDatabaseHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
+    public HistoryHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
     }
 

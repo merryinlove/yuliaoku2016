@@ -2,7 +2,7 @@ package com.xya.csu.suggestion;
 
 import android.content.Context;
 
-import com.xya.csu.database.HistoryDatabaseHelper;
+import com.xya.csu.database.HistoryHelper;
 
 import org.cryse.widget.persistentsearch.SearchItem;
 import org.cryse.widget.persistentsearch.SearchSuggestionsBuilder;
@@ -11,17 +11,17 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class SampleSuggestionsBuilder implements SearchSuggestionsBuilder {
+public class SuggestBuilder implements SearchSuggestionsBuilder {
     private Context mContext;
     private List<SearchItem> mHistorySuggestions = new ArrayList<SearchItem>();;
 
-    public SampleSuggestionsBuilder(Context context) {
+    public SuggestBuilder(Context context) {
         this.mContext = context;
         createHistorys();
     }
 
     private void createHistorys() {
-        HistoryDatabaseHelper helper = new HistoryDatabaseHelper(mContext);
+        HistoryHelper helper = new HistoryHelper(mContext);
         List<String> datas = helper.queryData();
         for (String data:datas) {
             SearchItem item = new SearchItem(
