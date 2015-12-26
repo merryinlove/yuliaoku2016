@@ -76,14 +76,15 @@ public class HistoryDatabaseHelper extends SQLiteOpenHelper {
 
     //获取最新的搜索词条
     private String queryTop() {
+        String result = "";
         String sql = "select _value from (select max(_date),_value from " + TABLE_NAME + ");";
         SQLiteDatabase database = this.getReadableDatabase();
         Cursor cursor = database.rawQuery(sql,null);
         while (cursor.moveToNext()){
-            return cursor.getString(cursor.getColumnIndex("_value"));
+            result = cursor.getString(cursor.getColumnIndex("_value"));
         }
         cursor.close();
-        return "";
+        return result;
     }
 
 }

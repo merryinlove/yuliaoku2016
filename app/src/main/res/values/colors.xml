@@ -3,5 +3,10 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="widgetColor">#8000</color>
+    <color name="widgetColor">#A000</color>
+    <color name="cephalosomeColor">#36AC84</color>
+    <color name="cardHeader">#179CC6</color>
+    <color name="separationColor">#CECECF</color>
+    <color name="spaceColor">#22F2F2F4</color>
+    <color name="translateColor">#6D6350</color>
 </resources>

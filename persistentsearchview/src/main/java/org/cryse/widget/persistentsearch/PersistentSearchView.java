@@ -100,25 +100,25 @@ public class PersistentSearchView extends RevealViewGroup {
 
     static float calculateVerticalPadding(CardView cardView) {
         float maxShadowSize = cardView.getMaxCardElevation();
-        float cornerRadius = cardView.getRadius();
-        boolean addPaddingForCorners = cardView.getPreventCornerOverlap();
+        //float cornerRadius = cardView.getRadius();
+        //boolean addPaddingForCorners = cardView.getPreventCornerOverlap();
 
-        if (addPaddingForCorners) {
-            return (float) (maxShadowSize * 1.5f + (1 - COS_45) * cornerRadius);
-        } else {
+        //if (addPaddingForCorners) {
+        //    return (float) (maxShadowSize * 1.5f + (1 - COS_45) * cornerRadius);
+        //} else {
             return maxShadowSize * 1.5f;
-        }
+        //}
     }
 
     static float calculateHorizontalPadding(CardView cardView) {
         float maxShadowSize = cardView.getMaxCardElevation();
-        float cornerRadius = cardView.getRadius();
-        boolean addPaddingForCorners = cardView.getPreventCornerOverlap();
-        if (addPaddingForCorners) {
-            return (float) (maxShadowSize + (1 - COS_45) * cornerRadius);
-        } else {
+        //float cornerRadius = cardView.getRadius();
+        //boolean addPaddingForCorners = cardView.getPreventCornerOverlap();
+        //if (addPaddingForCorners) {
+        //    return (float) (maxShadowSize + (1 - COS_45) * cornerRadius);
+        //} else {
             return maxShadowSize;
-        }
+        //}
     }
 
     /** Calculates the Toolbar height in pixels. */
@@ -169,16 +169,8 @@ public class PersistentSearchView extends RevealViewGroup {
         mCardVerticalPadding = (mCustomToolbarHeight - mCardHeight) / 2;
 
         switch (mDisplayMode) {
-            case MENUITEM:
+            //case MENUITEM:
             default:
-                mCardHorizontalPadding = getResources().getDimensionPixelSize(R.dimen.search_card_visible_padding_menu_item_mode);
-                if(mCardVerticalPadding > mCardHorizontalPadding)
-                    mCardHorizontalPadding = mCardVerticalPadding;
-                mHomeButtonCloseIconState = HomeButton.IconState.ARROW;
-                mHomeButtonOpenIconState = HomeButton.IconState.ARROW;
-                setCurrentState(SearchViewState.NORMAL);
-                break;
-            case TOOLBAR:
                 if(mHomeButtonMode == 0) { // Arrow Mode
                     mHomeButtonCloseIconState = HomeButton.IconState.ARROW;
                     mHomeButtonOpenIconState = HomeButton.IconState.ARROW;
@@ -379,8 +371,8 @@ public class PersistentSearchView extends RevealViewGroup {
                 CardView searchCard = (CardView) child;
                 int horizontalPadding = (int) Math.ceil(calculateHorizontalPadding(searchCard));
                 int verticalPadding = (int) Math.ceil(calculateVerticalPadding(searchCard));
-                searchCardLeft = mCardHorizontalPadding - horizontalPadding;
-                searchCardTop = mCardVerticalPadding - verticalPadding;
+                searchCardLeft = mCardHorizontalPadding;// - horizontalPadding;
+                searchCardTop = mCardVerticalPadding;// - verticalPadding;
                 searchCardWidth = searchViewWidth - searchCardLeft * 2;
                 searchCardHeight = child.getMeasuredHeight();
                 searchCardRight = searchCardLeft + searchCardWidth;
