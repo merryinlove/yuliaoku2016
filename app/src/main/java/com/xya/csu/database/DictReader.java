@@ -2,10 +2,13 @@ package com.xya.csu.database;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.text.TextUtils;
 
-import com.xya.csu.model.Oxford;
-import com.xya.csu.model.Yuliaoku;
 import com.xya.csu.acticities.InitialActivity;
+import com.xya.csu.model.Oxford;
+import com.xya.csu.model.OxfordWrapper;
+import com.xya.csu.model.Yuliaoku;
+import com.xya.csu.model.YuliaokuWrapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +37,7 @@ public class DictReader {
         return DictReaderHolder.dictReader;
     }
 
-    public List<Object> query(String key, String dictionary) {
+    public Object query(String key, String dictionary) {
         List<Object> result = new ArrayList<>();
         Cursor cursor = null;
         if (dictionary.toLowerCase().equals("yuliaoku".toLowerCase())) {
@@ -67,6 +70,8 @@ public class DictReader {
         if (cursor != null) {
             cursor.close();
         }
+        //合并同一key对象
+
         return result;
     }
 
@@ -88,6 +93,63 @@ public class DictReader {
             cursor.close();
         }
         return result;
+    }
+
+    private Object combineObj(List<Object> objects) {
+        //判断object的对象类型
+        Object o = objects.get(0);
+        if (o instanceof YuliaokuWrapper) return combineYuliaoku(objects);
+        else if (o instanceof OxfordWrapper) return combineOxford(objects);
+        else return null;
+    }
+
+    private YuliaokuWrapper combineYuliaoku(List<Object> objects) {
+        String _entry = ((Yuliaoku) objects.get(0)).getEntry();
+        List<String> _phonetic = new ArrayList<>();
+        List<String> _interpretation = new ArrayList<>();
+        List<String> _formation = new ArrayList<>();
+        List<String> _quotation = new ArrayList<>();
+        List<String> _translation = new ArrayList<>();
+        List<String> _author = new ArrayList<>();
+        List<String> _title = new ArrayList<>();
+        List<String> _source = new ArrayList<>();
+        List<String> _time = new ArrayList<>();
+        List<String> _en_sentential = new ArrayList<>();
+        List<String> _cn_sentential = new ArrayList<>();
+        for (Object o : objects) {
+            Yuliaoku yulaoku = (Yuliaoku) o;
+            String phonetic = yulaoku.getPhonetic();
+            if (TextUtils.isEmpty(phonetic)) _phonetic.add(phonetic);
+            String interpretation = yulaoku.getInterpretation();
+            if (TextUtils.isEmpty(interpretation)) _interpretation.add(interpretation);
+            String formation = yulaoku.getFormation();
+            _formation.add(formation);
+            String quotation = yulaoku.getQuotation();
+            _quotation.add(quotation);
+            String author = yulaoku.getAuthor();
+            _author.add(author);
+            String title = yulaoku.getTitle();
+            _title.add(title);
+            String source = yulaoku.getSource();
+            _source.add(source);
+            String time = yulaoku.getTime();
+            _time.add(time);
+            String en_sentential = yulaoku.getEn_sentential();
+            _en_sentential.add(en_sentential);
+            String cn_sentential = yulaoku.getCn_sentential();
+            _cn_sentential.add(cn_sentential);
+        }
+        return new YuliaokuWrapper(_entry, _phonetic, _interpretation, _formation, _quotation, _translation, _author, _title, _source, _time, _en_sentential, _cn_sentential);
+    }
+
+    private OxfordWrapper combineOxford(List<Object> objects) {
+        String _key = ((Oxford) objects.get(0)).get_key();
+        List<String> _value = new ArrayList<>();
+        for (Object o : objects) {
+            Oxford oxford = (Oxford) o;
+            _value.add(oxford.get_value());
+        }
+        return new OxfordWrapper(_key, _value);
     }
 
 }

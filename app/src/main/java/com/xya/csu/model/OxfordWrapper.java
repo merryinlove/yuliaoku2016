@@ -7,22 +7,22 @@ import java.util.List;
  * Oxford wrapper
  */
 public class OxfordWrapper {
-    private List<String> _key;
+    private String _key;
     private List<String> _value;
 
     public OxfordWrapper() {
     }
 
-    public OxfordWrapper(List<String> _key, List<String> _value) {
+    public OxfordWrapper(String _key, List<String> _value) {
         this._key = _key;
         this._value = _value;
     }
 
-    public List<String> get_key() {
+    public String get_key() {
         return _key;
     }
 
-    public void set_key(List<String> _key) {
+    public void set_key(String _key) {
         this._key = _key;
     }
 

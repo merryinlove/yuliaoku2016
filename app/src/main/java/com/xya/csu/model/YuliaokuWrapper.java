@@ -7,7 +7,7 @@ import java.util.List;
  * 封装多个yuliaoku对象
  */
 public class YuliaokuWrapper {
-    private List<String> _entry;
+    private String _entry;
     private List<String> _phonetic;
     private List<String> _interpretation;
     private List<String> _formation;
@@ -23,7 +23,7 @@ public class YuliaokuWrapper {
     public YuliaokuWrapper() {
     }
 
-    public YuliaokuWrapper(List<String> _entry, List<String> _phonetic, List<String> _interpretation, List<String> _formation, List<String> _quotation, List<String> _translation, List<String> _author, List<String> _title, List<String> _source, List<String> _time, List<String> _en_sentential, List<String> _cn_sentential) {
+    public YuliaokuWrapper(String _entry, List<String> _phonetic, List<String> _interpretation, List<String> _formation, List<String> _quotation, List<String> _translation, List<String> _author, List<String> _title, List<String> _source, List<String> _time, List<String> _en_sentential, List<String> _cn_sentential) {
         this._entry = _entry;
         this._phonetic = _phonetic;
         this._interpretation = _interpretation;
@@ -38,11 +38,11 @@ public class YuliaokuWrapper {
         this._cn_sentential = _cn_sentential;
     }
 
-    public List<String> get_entry() {
+    public String get_entry() {
         return _entry;
     }
 
-    public void set_entry(List<String> _entry) {
+    public void set_entry(String _entry) {
         this._entry = _entry;
     }
 
