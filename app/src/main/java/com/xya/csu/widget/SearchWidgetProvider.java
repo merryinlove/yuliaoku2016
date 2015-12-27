@@ -7,9 +7,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.RemoteViews;
 
-import com.xya.csu.yuliaoku.CaptureActivity;
-import com.xya.csu.yuliaoku.R;
-import com.xya.csu.yuliaoku.WidgetActivity;
+import com.xya.csu.acticities.CaptureActivity;
+import com.xya.csu.acticities.R;
+import com.xya.csu.acticities.WidgetActivity;
 
 /**
  * Created by jianglei on 15/12/21.

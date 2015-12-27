@@ -1,4 +1,4 @@
-package com.xya.csu.yuliaoku;
+package com.xya.csu.acticities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;

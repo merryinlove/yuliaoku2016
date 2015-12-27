@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.xya.csu.yuliaoku">
+    package="com.xya.csu.acticities">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".InitialActivity"
+            android:name="com.xya.csu.acticities.InitialActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,9 +32,9 @@
         </receiver>
 
         <activity
-            android:name=".WidgetActivity"
+            android:name="com.xya.csu.acticities.WidgetActivity"
             android:theme="@style/AppTheme.TransParent" />
-        <activity android:name=".CaptureActivity" />
+        <activity android:name="com.xya.csu.acticities.CaptureActivity" />
     </application>
 
 </manifest>

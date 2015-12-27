@@ -5,7 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.xya.csu.model.Oxford;
 import com.xya.csu.model.Yuliaoku;
-import com.xya.csu.yuliaoku.InitialActivity;
+import com.xya.csu.acticities.InitialActivity;
 
 import java.util.ArrayList;
 import java.util.List;

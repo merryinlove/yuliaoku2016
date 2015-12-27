@@ -1,9 +1,7 @@
-package com.xya.csu.yuliaoku;
+package com.xya.csu.acticities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-
-import com.xya.csu.yuliaoku.R;
 
 public class CaptureActivity extends AppCompatActivity {
 
