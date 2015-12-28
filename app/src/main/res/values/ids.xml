@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="meaning_ids">0xff020000</integer>
+    <integer name="quotation_ids">0xff020001</integer>
+    <integer name="translate_ids">0xff020002</integer>
+</resources>

@@ -10,6 +10,7 @@ import com.xya.csu.model.OxfordWrapper;
 import com.xya.csu.model.Yuliaoku;
 import com.xya.csu.model.YuliaokuWrapper;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,13 +21,12 @@ public class DictReader {
 
     private SQLiteDatabase database;
 
-    public SQLiteDatabase open() {
-        SQLiteDatabase database = SQLiteDatabase.openOrCreateDatabase(InitialActivity.external_path + InitialActivity.OXFORD, null);
-        return database;
+    public void open() {
+        database = SQLiteDatabase.openOrCreateDatabase(InitialActivity.external_path + File.separator + InitialActivity.OXFORD, null);
     }
 
     private DictReader() {
-        database = open();
+        open();
     }
 
     private static class DictReaderHolder {
@@ -71,8 +71,9 @@ public class DictReader {
             cursor.close();
         }
         //合并同一key对象
-
-        return result;
+        if (result.size() < 1)
+            return null;
+        return combineObj(result);
     }
 
     public List<String> querylike(String key, String dictionary) {
@@ -98,8 +99,8 @@ public class DictReader {
     private Object combineObj(List<Object> objects) {
         //判断object的对象类型
         Object o = objects.get(0);
-        if (o instanceof YuliaokuWrapper) return combineYuliaoku(objects);
-        else if (o instanceof OxfordWrapper) return combineOxford(objects);
+        if (o instanceof Yuliaoku) return combineYuliaoku(objects);
+        else if (o instanceof Oxford) return combineOxford(objects);
         else return null;
     }
 
