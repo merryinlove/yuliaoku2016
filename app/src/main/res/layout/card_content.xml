@@ -22,6 +22,7 @@
             android:textColor="@android:color/white" />
 
         <View
+            android:id="@+id/top"
             android:layout_width="match_parent"
             android:layout_height="0.1dip"
             android:background="@color/spaceColor" />
@@ -39,9 +40,10 @@
 
 
         <View
+            android:id="@+id/bottom"
             android:layout_width="match_parent"
             android:layout_height="0.1dip"
-            android:background="@color/spaceColor" />
+            android:background="@color/separationColor" />
 
         <TextView
             android:id="@+id/fix_cardView"

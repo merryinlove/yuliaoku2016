@@ -2,18 +2,21 @@ package com.xya.csu.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.xya.csu.acticities.R;
 import com.xya.csu.model.OxfordWrapper;
 import com.xya.csu.model.YuliaokuWrapper;
+import com.xya.csu.utility.Des3;
 import com.xya.csu.view.CardContentView;
 import com.xya.csu.view.ItemView;
+
+import org.apache.commons.lang3.StringEscapeUtils;
 
 import java.util.List;
 
@@ -26,9 +29,9 @@ public class DictAdapter extends RecyclerView.Adapter<DictAdapter.CardHolder> {
     private static final int Oxford_ITEM = 1;
     private static final int Other_ITEM = 2;
 
-    private int meaning_ids;
-    private int quotation_ids;
-    private int translate_ids;
+//    private int meaning_ids;
+//    private int quotation_ids;
+//    private int translate_ids;
 
     private List<Object> mDatas;
     private Context mContext;
@@ -37,9 +40,9 @@ public class DictAdapter extends RecyclerView.Adapter<DictAdapter.CardHolder> {
         this.mDatas = mDatas;
         this.mContext = mContext;
 
-        meaning_ids = mContext.getResources().getInteger(R.integer.meaning_ids);
-        quotation_ids = mContext.getResources().getInteger(R.integer.quotation_ids);
-        translate_ids = mContext.getResources().getInteger(R.integer.translate_ids);
+//        meaning_ids = mContext.getResources().getInteger(R.integer.meaning_ids);
+//        quotation_ids = mContext.getResources().getInteger(R.integer.quotation_ids);
+//        translate_ids = mContext.getResources().getInteger(R.integer.translate_ids);
 
     }
 
@@ -65,13 +68,13 @@ public class DictAdapter extends RecyclerView.Adapter<DictAdapter.CardHolder> {
 
                 CardContentView meaning = new CardContentView(mContext);
                 meaning.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                meaning.setId(meaning_ids);
+                // meaning.setId(meaning_ids);
                 CardContentView quotation = new CardContentView(mContext);
                 quotation.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                quotation.setId(quotation_ids);
+                // quotation.setId(quotation_ids);
                 CardContentView translate = new CardContentView(mContext);
                 translate.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                translate.setId(translate_ids);
+                // translate.setId(translate_ids);
                 layout.addView(meaning);
                 layout.addView(translate);
                 layout.addView(quotation);
@@ -91,21 +94,59 @@ public class DictAdapter extends RecyclerView.Adapter<DictAdapter.CardHolder> {
         switch (type) {
             case YULIAOKU_ITEM:
                 YuliaokuWrapper wrapper = (YuliaokuWrapper) o;
-                //holder.meaning.setCardBackgroundColor(mContext.getResources().getColor(R.color.cardHeader));
-//        holder.meaning.setTextColor(Color.WHITE);
-//        holder.meaning.setTitleTextView("语料库 #" + wrapper.get_entry());
-//        holder.meaning.setFixTextView("构词成分:#" + wrapper.get_formation());
+
+                //meaning
+                holder.meaning.setCardBackgroundColor(mContext.getResources().getColor(R.color.cardHeader));
+                holder.meaning.setSeparateColor(mContext.getResources().getColor(R.color.spaceColor));
+                holder.meaning.setTextColor(Color.WHITE);
+                holder.meaning.setTitleTextView("语料库 #" + wrapper.get_entry());
+
+                List<String> formation = wrapper.get_formation();
+                StringBuffer print = new StringBuffer(mContext.getString(R.string.formation_text));
+                for (String fot : formation) {
+                    //由于br可能会换行，替换掉以及tag中color影响textview颜色，换成不可识别字符串
+                    print.append(" #").append(removeUnnecessary(fot));
+                }
+                holder.meaning.setFixTextView(print.toString());
 
                 List<String> interpretation = wrapper.get_interpretation();
+                List<String> phonetic = wrapper.get_phonetic();
+
                 int size = interpretation.size();
                 for (int i = 0; i < size; i++) {
                     ItemView item = new ItemView(mContext);
+                    item.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                     item.setTextColor(Color.WHITE);
-                    item.setSequence(i + "");
-                    item.setSentence(interpretation.get(i));
-                    item.getTranslate().setVisibility(View.GONE);
-                    // holder.meaning.addContainerView(item);
+                    item.setSequence((i + 1) + ".");
+                    item.setSentence(removeUnnecessary(phonetic.get(i)));
+                    item.setTranslate(removeUnnecessary(interpretation.get(i)));
+                    holder.meaning.addContainerView(item);
                 }
+
+                //quotation
+                holder.quotation.setCardBackgroundColor(Color.WHITE);
+                holder.quotation.setSeparateColor(mContext.getResources().getColor(R.color.separationColor));
+                holder.quotation.setTextColor(mContext.getResources().getColor(R.color.cardTextColor));
+                holder.quotation.setTitleTextView("语料库 #引语");
+                holder.quotation.setFixTextView("查看更多");
+
+                int length = wrapper.get_quotation().size();
+                for (int i = 0; i < 2; i++) {
+                    ItemView item = new ItemView(mContext);
+                    item.setCenterText(wrapper.get_entry());
+                    item.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    item.setTextColor(mContext.getResources().getColor(R.color.cardTextColor));
+                    item.setSequence((i + 1) + ".");
+                    try {
+                        item.setSentence(Des3.decode(wrapper.get_quotation().get(i)));
+                        item.setTranslate(Des3.decode(wrapper.get_translation().get(i)));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    holder.quotation.addContainerView(item);
+                }
+
+
                 break;
             case Oxford_ITEM:
                 break;
@@ -117,21 +158,25 @@ public class DictAdapter extends RecyclerView.Adapter<DictAdapter.CardHolder> {
 
     @Override
     public int getItemCount() {
-        Log.d("yosemite", "" + (mDatas == null ? 0 : mDatas.size()));
         return mDatas == null ? 0 : mDatas.size();
     }
 
 
     class CardHolder extends RecyclerView.ViewHolder {
-        CardView meaning;
-        CardView quotation;
-        CardView translate;
+        CardContentView meaning;
+        CardContentView quotation;
+        CardContentView translate;
 
         public CardHolder(View v) {
             super(v);
-            meaning = (CardView) v.findViewById(meaning_ids);
-            quotation = (CardView) v.findViewById(quotation_ids);
-            translate = (CardView) v.findViewById(translate_ids);
+            meaning = (CardContentView) ((LinearLayout) v).getChildAt(0);
+            quotation = (CardContentView) ((LinearLayout) v).getChildAt(1);
+            translate = (CardContentView) ((LinearLayout) v).getChildAt(2);
         }
     }
+
+    private String removeUnnecessary(String ness){
+       return StringEscapeUtils.unescapeHtml4(ness).replace("<br>", "").replace("color", "c");
+    }
+
 }

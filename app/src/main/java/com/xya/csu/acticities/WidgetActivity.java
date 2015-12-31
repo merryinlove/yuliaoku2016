@@ -50,6 +50,7 @@ public class WidgetActivity extends AppCompatActivity {
 
             @Override
             public void onSearch(String query) {
+                dict.clear();
                 Object o = DictReader.getInstance().query(query.substring(1), "yuliaoku");
                 dict.add(o);
                 dictAdapter.notifyDataSetChanged();

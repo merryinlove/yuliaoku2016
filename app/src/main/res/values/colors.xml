@@ -9,4 +9,5 @@
     <color name="separationColor">#CECECF</color>
     <color name="spaceColor">#22F2F2F4</color>
     <color name="translateColor">#6D6350</color>
+    <color name="cardTextColor">#5D5D5D</color>
 </resources>

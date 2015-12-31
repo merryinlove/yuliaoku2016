@@ -2,7 +2,6 @@ package com.xya.csu.database;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.text.TextUtils;
 
 import com.xya.csu.acticities.InitialActivity;
 import com.xya.csu.model.Oxford;
@@ -12,6 +11,7 @@ import com.xya.csu.model.YuliaokuWrapper;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -119,27 +119,29 @@ public class DictReader {
         List<String> _cn_sentential = new ArrayList<>();
         for (Object o : objects) {
             Yuliaoku yulaoku = (Yuliaoku) o;
-            String phonetic = yulaoku.getPhonetic();
-            if (TextUtils.isEmpty(phonetic)) _phonetic.add(phonetic);
-            String interpretation = yulaoku.getInterpretation();
-            if (TextUtils.isEmpty(interpretation)) _interpretation.add(interpretation);
-            String formation = yulaoku.getFormation();
-            _formation.add(formation);
-            String quotation = yulaoku.getQuotation();
-            _quotation.add(quotation);
-            String author = yulaoku.getAuthor();
-            _author.add(author);
-            String title = yulaoku.getTitle();
-            _title.add(title);
-            String source = yulaoku.getSource();
-            _source.add(source);
-            String time = yulaoku.getTime();
-            _time.add(time);
-            String en_sentential = yulaoku.getEn_sentential();
-            _en_sentential.add(en_sentential);
-            String cn_sentential = yulaoku.getCn_sentential();
-            _cn_sentential.add(cn_sentential);
+            _phonetic.add(yulaoku.getPhonetic());
+            _translation.add(yulaoku.getTranslation());
+            _interpretation.add(yulaoku.getInterpretation());
+            _formation.add(yulaoku.getFormation());
+            _quotation.add(yulaoku.getQuotation());
+            _author.add(yulaoku.getAuthor());
+            _title.add(yulaoku.getTitle());
+            _source.add(yulaoku.getSource());
+            _time.add(yulaoku.getTime());
+            _en_sentential.add(yulaoku.getEn_sentential());
+            _cn_sentential.add(yulaoku.getCn_sentential());
         }
+
+        /*
+        * 去重
+        * */
+
+        //构词法的简单去重
+        removeDuplicate(_formation);
+        //音标释义的去重
+        removeDuplicate(_phonetic, _interpretation);
+
+
         return new YuliaokuWrapper(_entry, _phonetic, _interpretation, _formation, _quotation, _translation, _author, _title, _source, _time, _en_sentential, _cn_sentential);
     }
 
@@ -153,4 +155,35 @@ public class DictReader {
         return new OxfordWrapper(_key, _value);
     }
 
+    //去重
+    private void removeDuplicate(List<String> list) {
+        HashSet<String> t = new HashSet<>(list);
+        list.clear();
+        list.addAll(t);
+    }
+
+    //多项去重
+    private void removeDuplicate(List<String> list1, List<String> list2) {
+
+        int size = list1.size();
+
+        List<String> temp = new ArrayList<>();
+        for (int i = 0; i < size; i++) {
+            temp.add(list1.get(i) + UnCharacter + list2.get(i));
+        }
+        removeDuplicate(temp);
+
+        list1.clear();
+        list2.clear();
+
+        int length = temp.size();
+        for (int i = 0; i < length; i++) {
+            String[] item = temp.get(i).split(UnCharacter);
+
+            list1.add(item[0]);
+            list2.add(item[1]);
+
+        }
+    }
+    public static final String UnCharacter = "x0x-u";
 }
