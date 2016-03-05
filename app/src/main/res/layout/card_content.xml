@@ -1,57 +1,121 @@
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/content_cardView"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:cardBackgroundColor="@color/cardHeader">
+    android:layout_height="match_parent"
+    android:background="@color/widgetColor"
+    android:orientation="vertical">
 
-    <LinearLayout
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/card_vertical_margin"
-        android:layout_marginRight="@dimen/card_vertical_margin"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/title_cardView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/card_horizontal_margin"
-            android:layout_marginTop="@dimen/card_horizontal_margin"
-            android:text="牛津词典  #词组"
-            android:textColor="@android:color/white" />
-
-        <View
-            android:id="@+id/top"
-            android:layout_width="match_parent"
-            android:layout_height="0.1dip"
-            android:background="@color/spaceColor" />
+        app:cardBackgroundColor="@color/cardHeader">
 
         <LinearLayout
-            android:id="@+id/container_cardView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/card_item_margin"
-            android:layout_marginTop="@dimen/card_item_margin"
+            android:layout_marginLeft="@dimen/card_vertical_margin"
+            android:layout_marginRight="@dimen/card_vertical_margin"
             android:orientation="vertical">
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/card_horizontal_margin"
+                android:layout_marginTop="@dimen/card_horizontal_margin"
+                android:text="牛津词典  #词组"
+                android:textColor="@android:color/white"
+                android:id="@+id/title1_cardView" />
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dip"
+                android:background="@color/spaceColor" />
+
+            <LinearLayout
+                android:id="@+id/meaning_cardView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/card_item_margin"
+                android:layout_marginTop="@dimen/card_item_margin"
+                android:orientation="vertical">
+
+
+            </LinearLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dip"
+                android:background="@color/spaceColor" />
+
+            <TextView
+                android:id="@+id/formation_cardView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:text="构词成分:#-ab"
+                android:textColor="@android:color/white" />
         </LinearLayout>
+    </android.support.v7.widget.CardView>
 
 
-        <View
-            android:id="@+id/bottom"
-            android:layout_width="match_parent"
-            android:layout_height="0.1dip"
-            android:background="@color/separationColor" />
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="4dp" />
 
-        <TextView
-            android:id="@+id/fix_cardView"
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@android:color/white">
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
-            android:text="构词成分:#-ab"
-            android:textColor="@android:color/white" />
-    </LinearLayout>
-</android.support.v7.widget.CardView>
+            android:layout_marginLeft="@dimen/card_vertical_margin"
+            android:layout_marginRight="@dimen/card_vertical_margin"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/card_horizontal_margin"
+                android:layout_marginTop="@dimen/card_horizontal_margin"
+                android:text="语料库  #引语"
+                android:textColor="@color/cardTextColor"
+                android:id="@+id/title2_cardView" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dip"
+                android:background="@color/separationColor" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/card_item_margin"
+                android:layout_marginTop="@dimen/card_item_margin"
+                android:orientation="vertical"
+                android:focusable="false"
+                android:id="@+id/quotation_cardView">
+            </LinearLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dip"
+                android:background="@color/separationColor" />
+
+            <TextView
+                android:id="@+id/more_cardView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:text="查看更多"
+                android:textColor="@color/cardTextColor" />
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>

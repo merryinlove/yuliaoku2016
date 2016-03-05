@@ -3,9 +3,8 @@ package com.xya.csu.acticities;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 
-import com.xya.csu.adapter.DictAdapter;
+import com.xya.csu.adapter.ListItemAdapter;
 import com.xya.csu.database.DictReader;
 import com.xya.csu.suggestion.SuggestBuilder;
 import com.xya.csu.view.RecyclerViewWrapper;
@@ -21,7 +20,8 @@ public class WidgetActivity extends AppCompatActivity {
     private PersistentSearchView mSearchView;
     private RecyclerViewWrapper mRecyclerView;
     private List<Object> dict = new ArrayList<>();
-    private DictAdapter dictAdapter;
+    private ListItemAdapter itemAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,8 +34,8 @@ public class WidgetActivity extends AppCompatActivity {
         mRecyclerView.setEmptyView(findViewById(R.id.empty_view));
 
         //init adapter
-        dictAdapter = new DictAdapter(dict, WidgetActivity.this);
-        mRecyclerView.setAdapter(dictAdapter);
+        itemAdapter = new ListItemAdapter(dict, WidgetActivity.this);
+        mRecyclerView.setAdapter(itemAdapter);
 
         mSearchView = (PersistentSearchView) findViewById(R.id.searchview);
         mSearchView.setSuggestionBuilder(new SuggestBuilder(this));
@@ -45,7 +45,7 @@ public class WidgetActivity extends AppCompatActivity {
                 dict.clear();
                 Object o = DictReader.getInstance().query(query.substring(1), "yuliaoku");
                 dict.add(o);
-                dictAdapter.notifyDataSetChanged();
+                itemAdapter.notifyDataSetChanged();
             }
         });
     }
