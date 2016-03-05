@@ -11,6 +11,7 @@ import com.xya.csu.suggestion.SuggestBuilder;
 import com.xya.csu.view.RecyclerViewWrapper;
 
 import org.cryse.widget.persistentsearch.PersistentSearchView;
+import org.cryse.widget.persistentsearch.lisenter.SimpleSearchListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,43 +39,13 @@ public class WidgetActivity extends AppCompatActivity {
 
         mSearchView = (PersistentSearchView) findViewById(R.id.searchview);
         mSearchView.setSuggestionBuilder(new SuggestBuilder(this));
-        mSearchView.setSearchListener(new PersistentSearchView.SearchListener() {
-            @Override
-            public void onSearchCleared() {
-
-            }
-
-            @Override
-            public void onSearchTermChanged(String term) {
-
-            }
-
+        mSearchView.setSearchListener(new SimpleSearchListener() {
             @Override
             public void onSearch(String query) {
                 dict.clear();
                 Object o = DictReader.getInstance().query(query.substring(1), "yuliaoku");
                 dict.add(o);
                 dictAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onSearchEditOpened() {
-
-            }
-
-            @Override
-            public void onSearchEditClosed() {
-
-            }
-
-            @Override
-            public boolean onSearchEditBackPressed() {
-                return false;
-            }
-
-            @Override
-            public void onSearchExit() {
-
             }
         });
     }
