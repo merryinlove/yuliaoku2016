@@ -590,7 +590,7 @@ public class PersistentSearchView extends RevealViewGroup {
     private void buildSearchSuggestions(String query) {
         if (mSuggestionBuilder != null) {
             mSearchSuggestions.clear();
-            Collection<SearchItem> suggestions = mSuggestionBuilder.buildSearchSuggestion(10, query);
+            Collection<SearchItem> suggestions = mSuggestionBuilder.buildSearchSuggestion(6, query);
             if (suggestions != null && suggestions.size() > 0) {
                 mSearchSuggestions.addAll(suggestions);
             }
