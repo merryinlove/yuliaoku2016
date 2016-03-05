@@ -158,7 +158,7 @@ public class SuggestBuilder implements SearchSuggestionsBuilder {
                     SearchItem.TYPE_SEARCH_ITEM_SUGGESTION
             );
             items.add(oxfordSuggestion);
-            if (TextUtils.isEmpty(forthItem)) {
+            if (!TextUtils.isEmpty(forthItem)) {
                 SearchItem forthSuggestion = new SearchItem(
                         "搜索" + forthItem + ":" + query,
                         "%" + query,
@@ -166,7 +166,7 @@ public class SuggestBuilder implements SearchSuggestionsBuilder {
                 );
                 items.add(forthSuggestion);
             }
-            if (TextUtils.isEmpty(fifthItem)) {
+            if (!TextUtils.isEmpty(fifthItem)) {
                 SearchItem fifthSuggestion = new SearchItem(
                         "搜索" + fifthItem + ":" + query,
                         "^" + query,
@@ -174,7 +174,7 @@ public class SuggestBuilder implements SearchSuggestionsBuilder {
                 );
                 items.add(fifthSuggestion);
             }
-            if (TextUtils.isEmpty(sixthItem)) {
+            if (!TextUtils.isEmpty(sixthItem)) {
                 SearchItem sixthSuggestion = new SearchItem(
                         "搜索" + sixthItem + ":" + query,
                         "$" + query,

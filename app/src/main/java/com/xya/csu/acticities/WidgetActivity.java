@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import com.xya.csu.adapter.DictAdapter;
 import com.xya.csu.database.DictReader;
 import com.xya.csu.suggestion.SuggestBuilder;
+import com.xya.csu.view.RecyclerViewWrapper;
 
 import org.cryse.widget.persistentsearch.PersistentSearchView;
 
@@ -17,7 +18,7 @@ import java.util.List;
 public class WidgetActivity extends AppCompatActivity {
 
     private PersistentSearchView mSearchView;
-    private RecyclerView mRecyclerView;
+    private RecyclerViewWrapper mRecyclerView;
     private List<Object> dict = new ArrayList<>();
     private DictAdapter dictAdapter;
     @Override
@@ -25,11 +26,11 @@ public class WidgetActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_widget);
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.card_view);
+        mRecyclerView = (RecyclerViewWrapper) findViewById(R.id.card_view);
         mRecyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(layoutManager);
-        //mRecyclerView.setEmptyView(findViewById(R.id.empty_view));
+        mRecyclerView.setEmptyView(findViewById(R.id.empty_view));
 
         //init adapter
         dictAdapter = new DictAdapter(dict, WidgetActivity.this);

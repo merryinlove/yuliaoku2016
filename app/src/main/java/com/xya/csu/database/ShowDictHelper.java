@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,7 +71,7 @@ public class ShowDictHelper extends SQLiteOpenHelper {
     //num ->查询项目条数
     public List<String> queryTop(int num) {
         List<String> result = new ArrayList<>();
-        String sql = "select _value from " + TABLE_NAME + ") order by _priority limit 0," + num + ";";
+        String sql = "select _value from " + TABLE_NAME + " order by _priority limit 0," + num + ";";
         SQLiteDatabase database = this.getReadableDatabase();
         Cursor cursor = database.rawQuery(sql, null);
         while (cursor.moveToNext()) {
@@ -78,6 +79,7 @@ public class ShowDictHelper extends SQLiteOpenHelper {
             result.add(temp);
         }
         cursor.close();
+        Log.d("tag",result.size()+"");
         return result;
     }
 
