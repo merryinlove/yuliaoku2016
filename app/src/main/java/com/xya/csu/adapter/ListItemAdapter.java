@@ -24,7 +24,10 @@ import java.util.List;
 /**
  * Created by jianglei on 15/12/26.
  */
-public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.CardHolder> {
+public class ListItemAdapter extends RecyclerView.Adapter {
+
+    public static final int TYPE_LOCALE = 0;
+    public static final int TYPE_NETWORK = 1;
 
     private List<Object> mDatas;
     private Context mContext;
@@ -35,69 +38,85 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.CardHo
     }
 
     @Override
-    public CardHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new CardHolder(LayoutInflater.from(mContext).inflate(R.layout.card_content, parent, false));
+    public int getItemViewType(int position) {
+        if (position == getItemCount() - 1)
+            return TYPE_NETWORK;
+        return TYPE_LOCALE;
+
     }
 
     @Override
-    public void onBindViewHolder(CardHolder holder, int position) {
-        Object o = mDatas.get(position);
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        if (viewType == TYPE_LOCALE)
+            return new CardHolder(LayoutInflater.from(mContext).inflate(R.layout.card_content, parent, false));
+        else
+            return new NetworkHolder(LayoutInflater.from(mContext).inflate(R.layout.card_network, parent, false));
+    }
 
-        if (o instanceof YuliaokuWrapper) {
-            YuliaokuWrapper wrapper = (YuliaokuWrapper) o;
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
 
-            //标题
-            holder.title1.setText(String.format("语料库 %s", wrapper.get_entry()));
-            holder.title2.setText(String.format("语料库 引语 %s", wrapper.get_entry()));
-            //构词法
-            List<String> formation = wrapper.get_formation();
-            StringBuffer print = new StringBuffer(mContext.getString(R.string.formation_text));
-            for (String fot : formation) {
-                //由于br可能会换行，替换掉以及tag中color影响textview颜色，换成不可识别字符串
-                print.append(" ").append(removeUnnecessary(fot));
-            }
-            holder.formation.setText(Html.fromHtml(print.toString()));
+        if (viewHolder instanceof CardHolder) {
 
-            //读音翻译
-            List<String> phonetic = wrapper.get_phonetic();
-            List<String> interpretation = wrapper.get_interpretation();
-            int sizeInterpretation = interpretation.size();
-            holder.meaning.removeAllViews();
-            for (int i = 0; i < sizeInterpretation; i++) {
-                ItemView item = new ItemView(mContext);
-                item.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                item.setSequence(i + 1);
-                String phonetion = phonetic.get(i);
-                item.setSentence(removeUnnecessary(phonetion));
-                item.setTranslate(removeUnnecessary(interpretation.get(i)));
-                item.setTextColor(Color.WHITE);
-                holder.meaning.addView(item, i);
-            }
+            CardHolder holder = (CardHolder) viewHolder;
+            Object o = mDatas.get(position);
 
-            List<String> quotation = wrapper.get_quotation();
-            List<String> translaton = wrapper.get_translation();
-            int sizeQuotation = wrapper.get_quotation().size();
-            holder.quotation.removeAllViews();
-            for (int i = 0; i < sizeQuotation && i < 2; i++) {
-                ItemView item = new ItemView(mContext);
-                item.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                item.setSequence(i + 1);
-                try {
-                    item.setSentence(Des3.decode(quotation.get(i)));
-                    item.setTranslate(Des3.decode(translaton.get(i)));
-                } catch (Exception e) {
-                    e.printStackTrace();
+            if (o instanceof YuliaokuWrapper) {
+                YuliaokuWrapper wrapper = (YuliaokuWrapper) o;
+                //标题
+                holder.title1.setText(String.format("语料库 %s", wrapper.get_entry()));
+                holder.title2.setText(String.format("语料库 引语 %s", wrapper.get_entry()));
+                //构词法
+                List<String> formation = wrapper.get_formation();
+                StringBuffer print = new StringBuffer(mContext.getString(R.string.formation_text));
+                for (String fot : formation) {
+                    //由于br可能会换行，替换掉以及tag中color影响textview颜色，换成不可识别字符串
+                    print.append(" ").append(removeUnnecessary(fot));
                 }
-                item.setTextColor(R.color.cardTextColor);
-                holder.quotation.addView(item, i);
+                holder.formation.setText(Html.fromHtml(print.toString()));
+
+                //读音翻译
+                List<String> phonetic = wrapper.get_phonetic();
+                List<String> interpretation = wrapper.get_interpretation();
+                int sizeInterpretation = interpretation.size();
+                holder.meaning.removeAllViews();
+                for (int i = 0; i < sizeInterpretation; i++) {
+                    ItemView item = new ItemView(mContext);
+                    item.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    item.setSequence(i + 1);
+                    String phonetion = phonetic.get(i);
+                    item.setSentence(removeUnnecessary(phonetion));
+                    item.setTranslate(removeUnnecessary(interpretation.get(i)));
+                    item.setTextColor(Color.WHITE);
+                    holder.meaning.addView(item, i);
+                }
+
+                List<String> quotation = wrapper.get_quotation();
+                List<String> translaton = wrapper.get_translation();
+                int sizeQuotation = wrapper.get_quotation().size();
+                holder.quotation.removeAllViews();
+                for (int i = 0; i < sizeQuotation && i < 2; i++) {
+                    ItemView item = new ItemView(mContext);
+                    item.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    item.setSequence(i + 1);
+                    try {
+                        item.setSentence(Des3.decode(quotation.get(i)));
+                        item.setTranslate(Des3.decode(translaton.get(i)));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    item.setTextColor(R.color.cardTextColor);
+                    holder.quotation.addView(item, i);
+                }
             }
+        } else if (viewHolder instanceof NetworkHolder) {
+
         }
 
     }
 
     @Override
     public int getItemCount() {
-        Log.d("count",mDatas.size()+"}}}}}");
         return mDatas == null ? 0 : mDatas.size();
     }
 
@@ -117,6 +136,16 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.CardHo
             more = (TextView) v.findViewById(R.id.more_cardView);
         }
     }
+
+    class NetworkHolder extends RecyclerView.ViewHolder {
+        TextView network;
+
+        public NetworkHolder(View itemView) {
+            super(itemView);
+            network = (TextView) itemView.findViewById(R.id.network_cardView);
+        }
+    }
+
 
     private String removeUnnecessary(String ness) {
         return StringEscapeUtils.unescapeHtml4(ness).replace("<br>", "").replace("color", "c");

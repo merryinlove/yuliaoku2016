@@ -45,6 +45,7 @@ public class WidgetActivity extends AppCompatActivity {
                 dict.clear();
                 Object o = DictReader.getInstance().query(query.substring(1), "yuliaoku");
                 dict.add(o);
+                dict.add("network");
                 itemAdapter.notifyDataSetChanged();
             }
         });
