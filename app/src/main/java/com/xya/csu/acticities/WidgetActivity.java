@@ -42,9 +42,36 @@ public class WidgetActivity extends AppCompatActivity {
         mSearchView.setSearchListener(new SimpleSearchListener() {
             @Override
             public void onSearch(String query) {
+                char start = query.charAt(0);
+                //清空已有项目
                 dict.clear();
-                Object o = DictReader.getInstance().query(query.substring(1), "yuliaoku");
-                dict.add(o);
+                switch (start) {
+                    case '&':
+                        //搜索全部
+                        Object yu = DictReader.getInstance().query(query.substring(1), "yuliaoku");
+                        Object ox = DictReader.getInstance().query(query.substring(1), "Oxford");
+                        dict.add(yu);
+                        dict.add(ox);
+                        break;
+                    case '@':
+                        //搜索语料库
+                        Object yuliaoku = DictReader.getInstance().query(query.substring(1), "yuliaoku");
+                        dict.add(yuliaoku);
+                        itemAdapter.notifyDataSetChanged();
+                        break;
+                    case '#':
+                        //搜索牛津
+                        Object oxford = DictReader.getInstance().query(query.substring(1), "Oxford");
+                        dict.add(oxford);
+                        break;
+                    case '%':
+                        break;
+                    case '^':
+                        break;
+                    case '$':
+                        break;
+                }
+                //添加网络获取
                 dict.add("network");
                 itemAdapter.notifyDataSetChanged();
             }

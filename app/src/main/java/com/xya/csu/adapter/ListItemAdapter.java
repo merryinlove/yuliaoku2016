@@ -4,15 +4,16 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.xya.csu.acticities.R;
+import com.xya.csu.model.OxfordWrapper;
 import com.xya.csu.model.YuliaokuWrapper;
 import com.xya.csu.utility.Des3;
 import com.xya.csu.view.ItemView;
@@ -26,8 +27,9 @@ import java.util.List;
  */
 public class ListItemAdapter extends RecyclerView.Adapter {
 
-    public static final int TYPE_LOCALE = 0;
+    public static final int TYPE_YULIAOKU = 0;
     public static final int TYPE_NETWORK = 1;
+    public static final int TYPE_OXFORD = 2;
 
     private List<Object> mDatas;
     private Context mContext;
@@ -41,14 +43,21 @@ public class ListItemAdapter extends RecyclerView.Adapter {
     public int getItemViewType(int position) {
         if (position == getItemCount() - 1)
             return TYPE_NETWORK;
-        return TYPE_LOCALE;
-
+        Object o = mDatas.get(position);
+        if (o instanceof YuliaokuWrapper) {
+            return TYPE_YULIAOKU;
+        } else/* (o instanceof OxfordWrapper) */ {
+            return TYPE_OXFORD;
+        }
+        //return TYPE_LOCALE;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (viewType == TYPE_LOCALE)
+        if (viewType == TYPE_YULIAOKU)
             return new CardHolder(LayoutInflater.from(mContext).inflate(R.layout.card_content, parent, false));
+        else if (viewType == TYPE_OXFORD)
+            return new OxfordHolder(LayoutInflater.from(mContext).inflate(R.layout.card_oxford, parent, false));
         else
             return new NetworkHolder(LayoutInflater.from(mContext).inflate(R.layout.card_network, parent, false));
     }
@@ -108,9 +117,26 @@ public class ListItemAdapter extends RecyclerView.Adapter {
                     item.setTextColor(R.color.cardTextColor);
                     holder.quotation.addView(item, i);
                 }
+            } else if (o instanceof OxfordWrapper) {
+                OxfordWrapper wrapper = (OxfordWrapper) o;
             }
         } else if (viewHolder instanceof NetworkHolder) {
 
+        } else if (viewHolder instanceof OxfordHolder) {
+            OxfordHolder holder = (OxfordHolder) viewHolder;
+            Object o = mDatas.get(position);
+            if (o instanceof OxfordWrapper) {
+                OxfordWrapper wrapper = (OxfordWrapper) o;
+                StringBuffer buffer = new StringBuffer();
+                for (String fot : wrapper.get_value()) {
+                    try {
+                        buffer.append(Des3.decode(fot)).append("<br/>");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                holder.tv.loadData(buffer.toString(), "text/html; charset=UTF-8", null);
+            }
         }
 
     }
@@ -143,6 +169,16 @@ public class ListItemAdapter extends RecyclerView.Adapter {
         public NetworkHolder(View itemView) {
             super(itemView);
             network = (TextView) itemView.findViewById(R.id.network_cardView);
+        }
+    }
+
+    class OxfordHolder extends RecyclerView.ViewHolder {
+        WebView tv;
+
+        public OxfordHolder(View itemView) {
+            super(itemView);
+            tv = (WebView) itemView.findViewById(R.id.webView);
+           // tv.getSettings().
         }
     }
 

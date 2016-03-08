@@ -34,7 +34,9 @@ public class ItemView extends RelativeLayout {
         View.inflate(context, R.layout.sentence_item, this);
         sequence = (TextView) findViewById(R.id.sequence_item);
         sentence = (TextView) findViewById(R.id.sentence_item);
+        sentence.setTextIsSelectable(true);
         translate = (TextView) findViewById(R.id.translate_item);
+        translate.setTextIsSelectable(true);
     }
 
     public void setSequence(int sequence) {
