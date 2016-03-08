@@ -17,6 +17,19 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    sourceSets.main {
+        jniLibs.srcDir 'src/main/libs'
+        jni.srcDirs = []
+    }
+
+    task build(type: Exec) {
+        commandLine '/Users/jianglei/Documents/android/android-ndk-r9d/ndk-build', '-C', file('src/main/').absolutePath
+    }
+
+    tasks.withType(JavaCompile) {
+        compileTask -> compileTask.dependsOn build
+    }
 }
 
 dependencies {
