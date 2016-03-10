@@ -33,7 +33,7 @@
 
         <activity
             android:name="com.xya.csu.acticities.WidgetActivity"
-            android:theme="@style/AppTheme.TransParent" />
+            android:theme="@style/AppTheme.Widget" />
         <activity android:name="com.xya.csu.acticities.CaptureActivity" />
     </application>
 

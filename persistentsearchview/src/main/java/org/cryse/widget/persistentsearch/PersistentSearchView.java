@@ -149,7 +149,7 @@ public class PersistentSearchView extends RevealViewGroup {
             TypedArray attrsValue = getContext().obtainStyledAttributes(attrs,
                     R.styleable.PersistentSearchView);
             mDisplayMode = DisplayMode.fromInt(attrsValue.getInt(R.styleable.PersistentSearchView_persistentSV_displayMode, DisplayMode.MENUITEM.toInt()));
-            mSearchCardElevation = attrsValue.getDimensionPixelSize(R.styleable.PersistentSearchView_persistentSV_searchCardElevation, -1);
+            mSearchCardElevation = 0;//attrsValue.getDimensionPixelSize(R.styleable.PersistentSearchView_persistentSV_searchCardElevation, -1);
             mSearchTextColor = attrsValue.getColor(R.styleable.PersistentSearchView_persistentSV_searchTextColor, Color.BLACK);
             mLogoDrawable = attrsValue.getDrawable(R.styleable.PersistentSearchView_persistentSV_logoDrawable);
             mSearchEditTextColor = attrsValue.getColor(R.styleable.PersistentSearchView_persistentSV_editTextColor, Color.BLACK);
@@ -162,7 +162,7 @@ public class PersistentSearchView extends RevealViewGroup {
         }
 
         if (mSearchCardElevation < 0) {
-            mSearchCardElevation = getContext().getResources().getDimensionPixelSize(R.dimen.search_card_default_card_elevation);
+            mSearchCardElevation = 0;//getContext().getResources().getDimensionPixelSize(R.dimen.search_card_default_card_elevation);
         }
 
         mCardHeight = getResources().getDimensionPixelSize(R.dimen.search_card_height);

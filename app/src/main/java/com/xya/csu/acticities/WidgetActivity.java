@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import com.xya.csu.adapter.ListItemAdapter;
 import com.xya.csu.database.DictReader;
 import com.xya.csu.suggestion.SuggestBuilder;
+import com.xya.csu.utility.StatusBarUtil;
 import com.xya.csu.view.RecyclerViewWrapper;
 
 import org.cryse.widget.persistentsearch.PersistentSearchView;
@@ -26,6 +27,7 @@ public class WidgetActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_widget);
+        StatusBarUtil.setStatusBarDarkMode(true, this);
 
         mRecyclerView = (RecyclerViewWrapper) findViewById(R.id.card_view);
         mRecyclerView.setHasFixedSize(true);
