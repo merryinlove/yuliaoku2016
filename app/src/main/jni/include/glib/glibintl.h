@@ -1,9 +1,9 @@
 #ifndef __GLIBINTL_H__
 #define __GLIBINTL_H__
 
-#ifndef SIZEOF_CHAR
-#error "config.h must be included prior to glibintl.h"
-#endif
+#include "gversionmacros.h"
+#include "glibconfig.h"
+#include "gtypes.h"
 
 GLIB_AVAILABLE_IN_ALL
 const gchar * glib_gettext  (const gchar *str) G_GNUC_FORMAT(1);

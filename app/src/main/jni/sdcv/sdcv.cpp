@@ -58,13 +58,6 @@ namespace glib {
 int main(int argc, char *argv[])
 {
 	setlocale(LC_ALL, "");
-#if ENABLE_NLS
-	bindtextdomain("sdcv",
-                   //"./locale"//< for testing
-                   GETTEXT_TRANSLATIONS_PATH//< should be
-        );
-	textdomain("sdcv");
-#endif
 
 	gboolean show_version = FALSE;
 	gboolean show_list_dicts = FALSE;

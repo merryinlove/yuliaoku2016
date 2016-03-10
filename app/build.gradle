@@ -1,41 +1,85 @@
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.model.application'
+model {
 
-android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    android {
+        compileSdkVersion 23
+        buildToolsVersion "23.0.2"
 
-    defaultConfig {
-        applicationId "com.xya.csu"
-        minSdkVersion 15
-        targetSdkVersion 23
-        versionCode 1
-        versionName "1.0"
-    }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        defaultConfig {
+            applicationId "com.xya.csu"
+            minSdkVersion.apiLevel 15
+            targetSdkVersion.apiLevel 23
+            versionCode 1
+            versionName "1.0"
+            buildConfigFields {
+                create() {
+                    type "int"
+                    name "VALUE"
+                    value "1"
+                }
+            }
         }
-    }
 
-    sourceSets.main {
-        jniLibs.srcDir 'src/main/libs'
-        jni.srcDirs = []
-    }
+        ndk {
+            // All configurations that can be changed in android.ndk.
+            moduleName "yykdict"
+            toolchain "clang"
+            toolchainVersion "3.5"
+            // Note that CFlags has a capital C, which is inconsistent with
+            // the naming convention of other properties.  This is a
+            // technical limitation that will be resolved
+            CFlags.add("-Wno-error=format-security")
+            cppFlags.add("-frtti")
+            cppFlags.add("-std=c++11")
+            cppFlags.add("-fexceptions")
+            //ldFlags.add("-L/custom/lib/path")
+            ldLibs.add("z")
+            ldLibs.add("glib-2.0")
+            ldLibs.add("gnuintl")
+            stl "gnustl_static"
+        }
 
-    task build(type: Exec) {
-        commandLine '/Users/jianglei/Documents/android/android-ndk-r9d/ndk-build', '-C', file('src/main/').absolutePath
-    }
+        buildTypes {
+            release {
+                minifyEnabled false
+                proguardFiles.add(file("proguard-rules.pro"))
+            }
+        }
+        productFlavors {
+            create("flavor1") {
+                applicationId "com.xya.csu"
+                ndk {
+                    // You can customize the NDK configurations for each
+                    // productFlavors and buildTypes.
+                    abiFilters.add("armeabi")
+                }
+            }
+        }
+        sources {
+            main {
+                jni {
+                    exportedHeaders {
+                        srcDir "src/main/jni/include"
+                        srcDir "src/main/jni/include/glib"
+                        srcDir "src/main/jni/sdcv"
+                        srcDir "src/main/jni/sdcv/lib"
+                    }
+                    source {
+                        srcDir "src/main/jni/sdcv"
+                        srcDir "src/main/jni/sdcv/lib"
+                    }
+                }
+            }
+        }
 
-    tasks.withType(JavaCompile) {
-        compileTask -> compileTask.dependsOn build
     }
 }
 
+
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:23.2.0'
-    compile 'com.android.support:design:23.2.0'
+    compile 'com.android.support:appcompat-v7:23.1.1'
+    compile 'com.android.support:design:23.1.1'
     compile project(':persistentsearchview')
-    compile 'com.android.support:recyclerview-v7:23.2.0'
+    compile 'com.android.support:recyclerview-v7:23.1.1'
 }

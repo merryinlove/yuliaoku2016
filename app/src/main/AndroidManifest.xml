@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.xya.csu.acticities.InitialActivity"
+            android:name=".InitialActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,9 +32,19 @@
         </receiver>
 
         <activity
-            android:name="com.xya.csu.acticities.WidgetActivity"
+            android:name=".WidgetActivity"
             android:theme="@style/AppTheme.Widget" />
-        <activity android:name="com.xya.csu.acticities.CaptureActivity" />
+        <activity android:name=".CaptureActivity" />
+        <activity
+            android:name="com.xya.csu.MainActivity"
+            android:label="@string/title_activity_main"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

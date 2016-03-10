@@ -52,7 +52,7 @@
 #define HAVE_UNISTD_H 1
 
 /* Define as const if the declaration of iconv() needs const. */
-#define ICONV_CONST 
+#define ICONV_CONST
 
 /* Name of package */
 #define PACKAGE "sdcv"
@@ -76,7 +76,7 @@
 #define STDC_HEADERS 1
 
 /* Version number of package */
-#define VERSION "0.4.2"
+#define VERSION "0.5 beta4"
 
 /* Define to 1 if you have a fully functional readline library. */
 /* #undef WITH_READLINE */
