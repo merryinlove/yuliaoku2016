@@ -66,22 +66,6 @@ char *jstringTostring(JNIEnv *env, jstring jstr) {
     return rtn;
 }
 
-jstring strTojstring(JNIEnv *env, const char *pat) {
-    //定义java String类 strClass
-    jclass strClass = (env)->FindClass("java/lang/String");
-    //获取String(byte[],String)的构造器,用于将本地byte[]数组转换为一个新String
-    jmethodID ctorID = (env)->GetMethodID(strClass, "<init>",
-                                          "([BLjava/lang/String;)V");
-    //建立byte数组
-    jbyteArray bytes = (env)->NewByteArray(strlen(pat));
-    //将char* 转换为byte数组
-    (env)->SetByteArrayRegion(bytes, 0, strlen(pat), (jbyte *) pat);
-    // 设置String, 保存语言类型,用于byte数组转换至String时的参数
-    jstring encoding = (env)->NewStringUTF("utf-8");
-    //将byte数组转换为java String,并输出
-    return (jstring) (env)->NewObject(strClass, ctorID, bytes, encoding);
-}
-
 /*
  * Class:     com_xya_csu_utility_yykReader
  * Method:    setDataDir
@@ -159,6 +143,5 @@ JNIEXPORT jstring JNICALL Java_com_xya_csu_utility_YykReader_searchKey(
     std::unique_ptr<IReadLine> io(create_readline_object());
     char *result = jstringTostring(env, string);
     const char *success = lib.process_phrase(result, *io, FALSE);
-    __android_log_print(ANDROID_LOG_ERROR, "demo", success);
     return env->NewStringUTF(success);
 }
