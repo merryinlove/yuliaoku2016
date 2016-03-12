@@ -27,15 +27,13 @@
 #include "readline.hpp"
 #include "utils.hpp"
 
-static const char gVersion[] = VERSION;
-
 static const gchar *stardict_data_dir = "/sdcard/.yykdict";
 static const char *homedir = "/data/data/com.xya.csu/files";
 static strlist_t disable_list;
 std::string data_dir = stardict_data_dir;
 
 const strlist_t dicts_dir_list = {std::string(homedir) + G_DIR_SEPARATOR
-                                  + "dic", data_dir};
+                                  + ".dic", data_dir};
 
 namespace {
     static void free_str_array(gchar **arr) {
@@ -101,7 +99,6 @@ JNIEXPORT void JNICALL Java_com_xya_csu_utility_YykReader_setDataDir(
  */
 JNIEXPORT jstring JNICALL Java_com_xya_csu_utility_YykReader_listDict(
         JNIEnv *env, jobject obj) {
-
     string result = "";
 
     strlist_t order_list, disable_list;
@@ -111,11 +108,9 @@ JNIEXPORT jstring JNICALL Java_com_xya_csu_utility_YykReader_listDict(
                       DictInfo dict_info;
                       if (dict_info.load_from_ifo_file(filename, false)) {
                           const std::string bookname = utf8_to_locale_ign_err(dict_info.bookname);
-                          result = result + "." + bookname.c_str() + ",";//dict_info.wordcount;
                           char buf[256];
                           sprintf(buf, "%d", dict_info.wordcount);
-                          string b = buf;
-                          result = result + buf + "\n";
+                          result = result + "." + bookname.c_str() + "," + buf + "\n";
                           //result.append((const char *) dict_info.wordcount);
                       }
                   });
@@ -154,7 +149,7 @@ JNIEXPORT void JNICALL Java_com_xya_csu_utility_YykReader_useDict(JNIEnv *env,
 JNIEXPORT jstring JNICALL Java_com_xya_csu_utility_YykReader_searchKey(
         JNIEnv *env, jobject obj, jstring string) {
     const std::string conf_dir = std::string(homedir) + G_DIR_SEPARATOR
-                                 + ".stardict";
+                                 + ".yykdict";
     if (g_mkdir(conf_dir.c_str(), S_IRWXU) == -1 && errno != EEXIST)
         __android_log_print(ANDROID_LOG_ERROR, "error-list", _("g_mkdir failed: %s\n"),
                             strerror(errno));
