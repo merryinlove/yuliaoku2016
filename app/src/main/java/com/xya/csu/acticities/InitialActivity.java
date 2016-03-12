@@ -18,6 +18,9 @@ import java.util.zip.ZipInputStream;
 
 public class InitialActivity extends AppCompatActivity {
 
+    public static final String DICT = "/data/data/com.xya.csu/files";
+    public static final String YYKDICT = "/sdcard/.yykdict";
+
     interface InitializeListener {
         void onExecute();
 
@@ -34,6 +37,12 @@ public class InitialActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //创建相应文件夹
+        File dict = new File(DICT);
+        if (!dict.exists()) dict.mkdirs();
+        File yykdict = new File(YYKDICT);
+        if (!yykdict.exists()) yykdict.mkdirs();
 
         //检查是否已经拷贝asset
         external_path = getFilesDir().getAbsolutePath();

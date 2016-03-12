@@ -400,7 +400,7 @@ const char* Library::process_phrase(const char *loc_str, IReadLine &io, bool for
         }
 
     } else {
-        meaning = "Nothing similar";
+        meaning = "no-result";
     }
     g_free(str);
     return meaning.c_str();
