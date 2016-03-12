@@ -29,7 +29,6 @@
 
 static const gchar *stardict_data_dir = "/sdcard/.yykdict";
 static const char *homedir = "/data/data/com.xya.csu/files";
-static strlist_t disable_list;
 std::string data_dir = stardict_data_dir;
 
 const strlist_t dicts_dir_list = {std::string(homedir) + G_DIR_SEPARATOR
@@ -106,23 +105,35 @@ JNIEXPORT jstring JNICALL Java_com_xya_csu_utility_YykReader_listDict(
  * Method:    useDict
  * Signature: (Ljava/lang/String;)V
  */
-JNIEXPORT void JNICALL Java_com_xya_csu_utility_YykReader_useDict(JNIEnv *env,
-                                                                  jobject obj, jstring string) {
-    glib::StrArr use_dict_list;
-    get_addr(use_dict_list);
+JNIEXPORT jstring JNICALL Java_com_xya_csu_utility_YykReader_useDict(JNIEnv *env,
+                                                                     jobject obj, jstring bookname,
+                                                                     jstring key) {
+    static strlist_t disable_list_new;
+    char *result = jstringTostring(env, key);
+    char *book = jstringTostring(env, bookname);
     strlist_t empty_list;
+
     for_each_file(dicts_dir_list, ".ifo", empty_list, empty_list,
                   [&](const std::string &filename, bool) -> void {
                       DictInfo dict_info;
                       const bool load_ok = dict_info.load_from_ifo_file(filename, false);
+
                       if (!load_ok)
                           return;
 
-                      for (gchar **p = get_impl(use_dict_list); *p != nullptr; ++p)
-                          if (strcmp(*p, dict_info.bookname.c_str()) == 0)
-                              return;
-                      disable_list.push_back(dict_info.ifo_file_name);
+                      if (strcmp(book, dict_info.bookname.c_str()) == 0)
+                          return;
+
+                      disable_list_new.push_back(dict_info.ifo_file_name);
                   });
+
+    Library lib(TRUE, FALSE, FALSE);
+
+    lib.load(dicts_dir_list, empty_list, disable_list_new);
+    std::unique_ptr<IReadLine> io(create_readline_object());
+
+    const char *success = lib.process_phrase(result, *io, FALSE);
+    return env->NewStringUTF(success);
 }
 
 /*
@@ -132,6 +143,7 @@ JNIEXPORT void JNICALL Java_com_xya_csu_utility_YykReader_useDict(JNIEnv *env,
  */
 JNIEXPORT jstring JNICALL Java_com_xya_csu_utility_YykReader_searchKey(
         JNIEnv *env, jobject obj, jstring string) {
+    static strlist_t disable_list;
     const std::string conf_dir = std::string(homedir) + G_DIR_SEPARATOR
                                  + ".yykdict";
     if (g_mkdir(conf_dir.c_str(), S_IRWXU) == -1 && errno != EEXIST)

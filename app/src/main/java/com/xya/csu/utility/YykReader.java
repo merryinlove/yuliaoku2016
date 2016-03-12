@@ -15,7 +15,7 @@ public class YykReader {
 
     public native String listDict();
 
-    public native void useDict(String bookname);
+    public native String useDict(String bookname, String key);
 
     public native String searchKey(String key);
 

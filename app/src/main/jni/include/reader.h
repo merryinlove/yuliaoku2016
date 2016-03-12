@@ -28,8 +28,8 @@ JNIEXPORT jstring JNICALL Java_com_xya_csu_utility_YykReader_listDict
  * Method:    useDict
  * Signature: (Ljava/lang/String;)V
  */
-JNIEXPORT void JNICALL Java_com_xya_csu_utility_YykReader_useDict
-  (JNIEnv *, jobject, jstring);
+JNIEXPORT jstring JNICALL Java_com_xya_csu_utility_YykReader_useDict
+  (JNIEnv *, jobject, jstring,jstring);
 
 /*
  * Class:     com_xya_csu_utility_YykReader
