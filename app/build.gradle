@@ -34,9 +34,12 @@ model {
             cppFlags.add("-fexceptions")
             //ldFlags.add("-L/custom/lib/path")
             ldLibs.add("z")
+            ldLibs.add("log")
             ldLibs.add("glib-2.0")
             ldLibs.add("gnuintl")
             stl "gnustl_static"
+            debuggable = true
+            platformVersion = 17
         }
 
         buildTypes {

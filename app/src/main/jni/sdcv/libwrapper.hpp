@@ -29,7 +29,7 @@ public:
 	Library(bool uinput, bool uoutput, bool colorize_output):
 		utf8_input_(uinput), utf8_output_(uoutput), colorize_output_(colorize_output) {}
 
-	bool process_phrase(const char *loc_str, IReadLine &io, bool force = false);
+	const char* process_phrase(const char *loc_str, IReadLine &io, bool force = false);
 private:
 	bool utf8_input_;
     bool utf8_output_;

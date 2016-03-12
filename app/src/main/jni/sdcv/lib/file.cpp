@@ -1,6 +1,7 @@
 #include <algorithm>
 
 #include <glib.h>
+#include <android/log.h>
 
 #include "file.hpp"
 

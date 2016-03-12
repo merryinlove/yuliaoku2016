@@ -25,6 +25,7 @@
 #include <memory>
 
 #include <glib/gi18n.h>
+#include <android/log.h>
 
 #include "utils.hpp"
 
@@ -291,10 +292,9 @@ namespace {
     };
 }
 
-bool Library::process_phrase(const char *loc_str, IReadLine &io, bool force)
-{
+const char* Library::process_phrase(const char *loc_str, IReadLine &io, bool force) {
 	if (nullptr == loc_str)
-		return true;
+		return nullptr;
 
 	std::string query;
 
@@ -315,46 +315,51 @@ bool Library::process_phrase(const char *loc_str, IReadLine &io, bool force)
 		fprintf(stderr, _("Can not convert %s to utf8.\n"), loc_str);
 		fprintf(stderr, "%s\n", err->message);
 		g_error_free(err);
-		return false;
+		return "Can not convert to utf8.\n";
+
 	}
 
-	if (str[0]=='\0')
-		return true;
-  
+	if (str[0] == '\0')
+		return nullptr;
+
 	TSearchResultList res_list;
 
 	switch (analyze_query(str, query)) {
-	case qtFUZZY:
-		LookupWithFuzzy(query, res_list);
-		break;
-	case qtREGEXP:
-		LookupWithRule(query, res_list);
-		break;
-	case qtSIMPLE:
-		SimpleLookup(str, res_list);
-		if (res_list.empty())
-			LookupWithFuzzy(str, res_list);
-		break;
-	case qtDATA:
-		LookupData(query, res_list);
-		break;
-	default:
-		/*nothing*/;
+		case qtFUZZY:
+			LookupWithFuzzy(query, res_list);
+			break;
+		case qtREGEXP:
+			LookupWithRule(query, res_list);
+			break;
+		case qtSIMPLE:
+			SimpleLookup(str, res_list);
+			if (res_list.empty())
+				LookupWithFuzzy(str, res_list);
+			break;
+		case qtDATA:
+			LookupData(query, res_list);
+			break;
+		default:
+			/*nothing*/
+			;
 	}
 
-	if (!res_list.empty()) {    
+
+    string meaning = "";
+	if (!res_list.empty()) {
 		/* try to be more clever, if there are
-		   one or zero results per dictionary show all
-		*/
+		 one or zero results per dictionary show all
+		 */
 		bool show_all_results = true;
-		typedef std::map< std::string, int, std::less<std::string> > DictResMap;
+		typedef std::map<std::string, int, std::less<std::string> > DictResMap;
 		if (!force) {
 			DictResMap res_per_dict;
 			for (const TSearchResult& search_res : res_list) {
 				auto r = res_per_dict.equal_range(search_res.bookname);
 				DictResMap tmp(r.first, r.second);
 				if (tmp.empty()) //there are no yet such bookname in map
-					res_per_dict.insert(DictResMap::value_type(search_res.bookname, 1));
+					res_per_dict.insert(
+							DictResMap::value_type(search_res.bookname, 1));
 				else {
 					++((tmp.begin())->second);
 					if (tmp.begin()->second > 1) {
@@ -363,54 +368,95 @@ bool Library::process_phrase(const char *loc_str, IReadLine &io, bool force)
 					}
 				}
 			}
-		}//if (!force)
+		} //if (!force)
+
+
 
 		if (!show_all_results && !force) {
-			printf(_("Found %zu items, similar to %s.\n"), res_list.size(), 
-			       utf8_output_ ? str : utf8_to_locale_ign_err(str).c_str());
 			for (size_t i = 0; i < res_list.size(); ++i) {
-                const std::string loc_bookname = utf8_to_locale_ign_err(res_list[i].bookname);
-                const std::string loc_def = utf8_to_locale_ign_err(res_list[i].def);
+				const std::string loc_bookname = utf8_to_locale_ign_err(
+						res_list[i].bookname);
+				const std::string loc_def = utf8_to_locale_ign_err(
+						res_list[i].def);
 				printf("%zu)%s%s%s-->%s%s%s\n", i,
-                       colorize_output_ ? NAME_OF_DICT_VISFMT : "",
-				       utf8_output_ ?  res_list[i].bookname.c_str() : loc_bookname.c_str(),
-                       colorize_output_ ? ESC_END : "",
-                       colorize_output_ ? SEARCH_TERM_VISFMT : "",
-				       utf8_output_ ? res_list[i].def.c_str() : loc_def.c_str(),
-                       colorize_output_ ? ESC_END : "");
+					   colorize_output_ ? NAME_OF_DICT_VISFMT : "",
+					   utf8_output_ ?  res_list[i].bookname.c_str() : loc_bookname.c_str(),
+					   colorize_output_ ? ESC_END : "",
+					   colorize_output_ ? SEARCH_TERM_VISFMT : "",
+					   utf8_output_ ? res_list[i].def.c_str() : loc_def.c_str(),
+					   colorize_output_ ? ESC_END : "");
+
+				utf8_output_ ? meaning = res_list[i].bookname + res_list[i].def:meaning = loc_bookname + loc_def;
 			}
-			int choise;
-			std::unique_ptr<IReadLine> choice_readline(create_readline_object());
-			for (;;) {
-                std::string str_choise;
-				choice_readline->read(_("Your choice[-1 to abort]: "), str_choise);
-				sscanf(str_choise.c_str(), "%d", &choise);
-				if (choise >= 0 && choise < int(res_list.size())) { 
-					sdcv_pager pager;
-					print_search_result(pager.get_stream(), res_list[choise]);
-					break;
-				} else if (choise == -1){
-					break;
-				} else
-					printf(_("Invalid choice.\nIt must be from 0 to %zu or -1.\n"), 
-					       res_list.size()-1);
-			}
+//			int choise;
+//			std::unique_ptr<IReadLine> choice_readline(
+//					create_readline_object());
+//			for (;;) {
+//				std::string str_choise;
+//				choice_readline->read(_("Your choice[-1 to abort]: "),
+//						str_choise);
+//				sscanf(str_choise.c_str(), "%d", &choise);
+//				if (choise >= 0 && choise < int(res_list.size())) {
+//					sdcv_pager pager;
+//					//print_search_result(pager.get_stream(), res_list[choise]);
+//					std::string loc_bookname, loc_def, loc_exp;
+//
+//					if (!utf8_output_) {
+//						loc_bookname = utf8_to_locale_ign_err(
+//								res_list[choise].bookname);
+//						loc_def = utf8_to_locale_ign_err(res_list[choise].def);
+//						loc_exp = utf8_to_locale_ign_err(res_list[choise].exp);
+//					}
+//
+//					//for output
+//					std: string result = "";
+//					result.append(
+//							utf8_output_ ?
+//									res_list[choise].bookname.c_str() :
+//									loc_bookname.c_str());
+//					result.append(
+//							utf8_output_ ?
+//									res_list[choise].def.c_str() :
+//									loc_def.c_str());
+//					result.append(
+//							utf8_output_ ?
+//									res_list[choise].exp.c_str() :
+//									loc_exp.c_str());
+//
+//					break;
+//				} else if (choise == -1) {
+//					break;
+//				} else
+//					printf(
+//							_(
+//									"Invalid choice.\nIt must be from 0 to %zu or -1.\n"),
+//							res_list.size() - 1);
+//			}
 		} else {
 			sdcv_pager pager(force);
-			fprintf(pager.get_stream(), _("Found %zu items, similar to %s.\n"), 
-				res_list.size(), utf8_output_ ? str : utf8_to_locale_ign_err(str).c_str());
-			for (const TSearchResult& search_res : res_list)
-				print_search_result(pager.get_stream(), search_res);
+			fprintf(pager.get_stream(), _("Found %zu items, similar to %s.\n"),
+					res_list.size(),
+					utf8_output_ ? str : utf8_to_locale_ign_err(str).c_str());
+			for (const TSearchResult& search_res : res_list) {
+				//print_search_result(pager.get_stream(), search_res);
+				//void Library::print_search_result(FILE *out, const TSearchResult & res)
+				std::string loc_bookname, loc_def, loc_exp;
+
+				if (!utf8_output_) {
+					loc_bookname = utf8_to_locale_ign_err(search_res.bookname);
+					loc_def = utf8_to_locale_ign_err(search_res.def);
+					loc_exp = utf8_to_locale_ign_err(search_res.exp);
+				}
+
+				utf8_output_ ? meaning = search_res.bookname + search_res.def + search_res.exp : meaning = loc_bookname + loc_def + loc_exp;
+				//__android_log_print(ANDROID_LOG_ERROR,"demo",meaning.c_str());
+			}
 		}
-    
+
 	} else {
-		std::string loc_str;
-		if (!utf8_output_)
-			loc_str = utf8_to_locale_ign_err(str);
-    
-		printf(_("Nothing similar to %s, sorry :(\n"), utf8_output_ ? str : loc_str.c_str());
+		meaning = "Nothing similar";
 	}
 	g_free(str);
-
-	return true;
+	__android_log_print(ANDROID_LOG_ERROR,"demo",meaning.c_str());
+	return meaning.c_str();
 }

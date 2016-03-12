@@ -29,7 +29,7 @@ LOCAL_SRC_FILES:= \
 	sdcv/utils.cpp \
 	sdcv/libwrapper.cpp \
 	sdcv/readline.cpp \
-	sdcv/sdcv.cpp 
+	sdcv/reader.cpp 
 
 LOCAL_C_INCLUDES += \
 	$(LOCAL_PATH)/sdcv \
@@ -39,10 +39,10 @@ LOCAL_C_INCLUDES += \
 
 LOCAL_CPPFLAGS += -Wno-error=format-security
 
-LOCAL_LDLIBS := -lz
+LOCAL_LDLIBS := -lz -llog
 
 LOCAL_STATIC_LIBRARIES +=  intl  glib 
 
 LOCAL_MODULE:= libreader
 
-include $(BUILD_EXECUTABLE)
+include $(BUILD_SHARED_LIBRARY)
