@@ -28,7 +28,7 @@ public class InitialActivity extends AppCompatActivity {
     }
 
 
-    public static final String OXFORD = "dict.dat";
+    public static final String DATA = "oxford-gb-formated.ifo";
 
     public static String external_path;
 
@@ -45,8 +45,8 @@ public class InitialActivity extends AppCompatActivity {
         if (!yykdict.exists()) yykdict.mkdirs();
 
         //检查是否已经拷贝asset
-        external_path = getFilesDir().getAbsolutePath();
-        File dictionary = new File(external_path, OXFORD);
+        external_path = getFilesDir().getAbsolutePath() + "/.dic";
+        File dictionary = new File(external_path, DATA);
         if (dictionary.exists()) {
             //已初始化完成
             Intent intent = new Intent(InitialActivity.this, WidgetActivity.class);

@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.xya.csu.acticities.R;
+import com.xya.csu.task.InterpretTask;
 import com.xya.csu.utility.YykDecoder;
 import com.xya.csu.utility.YykReader;
 
@@ -55,9 +56,17 @@ public class DictAdapter extends RecyclerView.Adapter<DictAdapter.BaseHolder> {
     public void onBindViewHolder(BaseHolder holder, int position) {
         if (holder instanceof DictHolder) {
             DictHolder dictHolder = (DictHolder) holder;
-            Dict text = (Dict) mDatas.get(position);
-            dictHolder.title.setText(text.mName);
-            dictHolder.main.setText(text.mMeaning);
+            if (position == mDatas.size() - 1) {
+                String key = ((Dict) mDatas.get(position)).mName;
+                dictHolder.main.setText("网络翻译 ==> " + key);
+                //加载网络数据
+                InterpretTask interpretTask = new InterpretTask(dictHolder.title);
+                interpretTask.execute();
+            } else {
+                Dict text = (Dict) mDatas.get(position);
+                dictHolder.title.setText(text.mName);
+                dictHolder.main.setText(text.mMeaning);
+            }
         } else {
             ItemHolder itemHolder = (ItemHolder) holder;
             if (position == 0) {

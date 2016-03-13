@@ -52,11 +52,17 @@ public class YykDecoder {
     }
 
     private List<DictAdapter.Dict> dictDecode(List<String> strings) {
+        String key = null;
         List<DictAdapter.Dict> dicts = new ArrayList<>();
         for (String token : strings) {
             String[] tokens = token.split("=>");
+            if (TextUtils.isEmpty(key)){
+                key = tokens[1].trim();
+            }
             dicts.add(new DictAdapter.Dict(tokens[2].trim(),tokens[0].trim()+" ==> "+tokens[1].trim()));
         }
+        //为了获取网络数据
+        dicts.add(new DictAdapter.Dict(key, ""));
         return dicts;
     }
 }

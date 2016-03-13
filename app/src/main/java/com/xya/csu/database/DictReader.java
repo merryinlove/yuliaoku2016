@@ -22,7 +22,7 @@ public class DictReader {
     private SQLiteDatabase database;
 
     public void open() {
-        database = SQLiteDatabase.openOrCreateDatabase(InitialActivity.external_path + File.separator + InitialActivity.OXFORD, null);
+       // database = SQLiteDatabase.openOrCreateDatabase(InitialActivity.external_path + File.separator + InitialActivity.OXFORD, null);
     }
 
     private DictReader() {
