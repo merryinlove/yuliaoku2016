@@ -5,8 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 
 import com.xya.csu.adapter.DictAdapter;
-import com.xya.csu.adapter.ListItemAdapter;
-import com.xya.csu.database.DictReader;
 import com.xya.csu.suggestion.SuggestBuilder;
 import com.xya.csu.utility.StatusBarUtil;
 import com.xya.csu.utility.YykDecoder;
@@ -40,7 +38,7 @@ public class WidgetActivity extends AppCompatActivity {
         mRecyclerView = (RecyclerViewWrapper) findViewById(R.id.card_view);
         mRecyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        layoutManager.setStackFromEnd(true);
+        //layoutManager.setStackFromEnd(true);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setEmptyView(findViewById(R.id.empty_view));
 
@@ -61,7 +59,7 @@ public class WidgetActivity extends AppCompatActivity {
                         //搜索全部
                         //Object yu = DictReader.getInstance().query(query.substring(1), "yuliaoku");
                         String ox = reader.searchKey(query.substring(1));
-                        List<String> tokens = decoder.decode(ox);
+                        List tokens = decoder.decode(ox);
                         dict.addAll(tokens);
                         break;
                     case '@':

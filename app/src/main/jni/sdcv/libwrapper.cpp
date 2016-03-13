@@ -376,8 +376,8 @@ const char* Library::process_phrase(const char *loc_str, IReadLine &io, bool for
                         res_list[i].bookname);
                 const std::string loc_def = utf8_to_locale_ign_err(
                         res_list[i].def);
-                utf8_output_ ? meaning += "==>" + res_list[i].bookname + res_list[i].def + "\n" :
-                        meaning += "==>" + loc_bookname + loc_def + "\n";
+                utf8_output_ ? meaning += "==>" + res_list[i].bookname + "=>" + res_list[i].def + "\n" :
+                        meaning += "==>" + loc_bookname + "=>" +loc_def + "\n";
 
             }
         } else {
@@ -393,9 +393,9 @@ const char* Library::process_phrase(const char *loc_str, IReadLine &io, bool for
                     loc_exp = utf8_to_locale_ign_err(search_res.exp);
                 }
 
-                utf8_output_ ? meaning += "==>" + search_res.bookname +
+                utf8_output_ ? meaning += "==>" + search_res.bookname + "=>" + search_res.def + "=>" +
                                           search_res.exp + "\n"
-                             : meaning += "==>" + loc_bookname + loc_exp + "\n";
+                             : meaning += "==>" + loc_bookname + "=>" + search_res.def + "=>" + loc_exp + "\n";
             }
         }
 
