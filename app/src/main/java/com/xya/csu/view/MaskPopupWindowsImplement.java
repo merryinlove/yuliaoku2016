@@ -1,10 +1,14 @@
 package com.xya.csu.view;
 
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
+import com.xya.csu.acticities.CaptureActivity;
 import com.xya.csu.acticities.R;
 
 import java.util.ArrayList;
@@ -32,6 +36,26 @@ public class MaskPopupWindowsImplement extends MaskPopupWindow<Void> {
                 context, getData(), R.layout.list_select, new String[]{"key"}, new int[]{R.id.select}
         );
         select.setAdapter(adapter);
+        select.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Log.d("position",i+"");
+                Intent intent = new Intent();
+                switch (i) {
+                    case 0:
+                        intent.setClass(context, CaptureActivity.class);
+                        break;
+                    case 1:
+                        intent.setClass(context, CaptureActivity.class);
+                        break;
+                    case 2:
+                        intent.setClass(context, CaptureActivity.class);
+                        break;
+                    default:return;
+                }
+                context.startActivity(intent);
+            }
+        });
         return root;
     }
 
@@ -39,7 +63,7 @@ public class MaskPopupWindowsImplement extends MaskPopupWindow<Void> {
         List<Map<String, String>> list = new ArrayList<>();
         for (String token : CONSTANT) {
             Map<String, String> map = new HashMap<>();
-            map.put("key",token);
+            map.put("key", token);
             list.add(map);
         }
         return list;
