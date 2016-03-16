@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
@@ -15,6 +16,8 @@ import android.graphics.RectF;
 import android.hardware.Camera;
 import android.hardware.Camera.Size;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Message;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -23,7 +26,10 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.googlecode.tesseract.android.TessBaseAPI;
+import com.xya.csu.acticities.InitialActivity;
 import com.xya.csu.utility.ThreadPoolUtils;
 
 import java.io.BufferedOutputStream;
@@ -52,9 +58,11 @@ public class CameraPreview extends ViewGroup implements SurfaceHolder.Callback, 
     private int screenWidth;
     private int screenHeight;
     private volatile boolean flag = false;
+    private TessBaseAPI baseAPI;
+    private TextView textView;
     RectF rectF = new RectF();
 
-    public CameraPreview(Context context, SurfaceView sv) {
+    public CameraPreview(Context context, SurfaceView sv, TextView mainText) {
         super(context);
         mContext = context;
         mSurfaceView = sv;
@@ -66,6 +74,7 @@ public class CameraPreview extends ViewGroup implements SurfaceHolder.Callback, 
                 PackageManager.FEATURE_CAMERA_AUTOFOCUS);
         DisplayMetrics dm = new DisplayMetrics();
         ((Activity) mContext).getWindowManager().getDefaultDisplay().getMetrics(dm);
+        textView = mainText;
         screenWidth = dm.widthPixels;
         screenHeight = dm.heightPixels;
 
@@ -82,6 +91,9 @@ public class CameraPreview extends ViewGroup implements SurfaceHolder.Callback, 
         rectF.top = screenHeight / 3;
         rectF.right = screenWidth * 3 / 4;
         rectF.bottom = screenHeight / 3 + 60;
+
+        baseAPI = new TessBaseAPI();
+        baseAPI.init("/sdcard/.yykdict/", "eng");
 
         ThreadPoolUtils.execute(new Runnable() {
             @Override
@@ -178,39 +190,37 @@ public class CameraPreview extends ViewGroup implements SurfaceHolder.Callback, 
     }
 
     public Bitmap imageCrop(Bitmap bitmap) {
-        int retX = bitmap.getHeight() / 3;
-        int retY = bitmap.getWidth() / 4;
-        Bitmap bm = Bitmap.createBitmap(bitmap, (int)rectF.top, (int)rectF.left, 60, screenWidth / 2, null, false);
+        Bitmap bm = Bitmap.createBitmap(bitmap, (int) rectF.top, (int) rectF.left, 60, screenWidth / 2, null, false);
         bitmap.recycle();
         return bm;
     }
 
-    /*给定一个Bitmap，进行保存*/
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            String result = (String) msg.obj;
+            textView.setText(result);
+            super.handleMessage(msg);
+        }
+    };
+
     public void saveCrop(byte[] data, Size size) {
         Bitmap bitmap = rawByteArray2RGBABitmap2(data, size.width, size.height);
-
-        Log.d("bitmap", "width = " + bitmap.getWidth() + " height == " + bitmap.getHeight());
-
         Matrix matrix = new Matrix();
         matrix.postRotate(90);
         Bitmap temp = imageCrop(bitmap);
-
-        Log.d("crop", "width = " + temp.getWidth() + " height == " + temp.getHeight());
-
-
         Bitmap bm = Bitmap.createBitmap(temp, 0, 0, temp.getWidth(), temp.getHeight(), matrix, true);
 
         Log.d("bm", "width = " + bm.getWidth() + " height == " + bm.getHeight());
 
 
-        String savePath = "/sdcard/rectPhoto/";
+        String savePath = InitialActivity.DICT;
         File folder = new File(savePath);
         if (!folder.exists()) //如果文件夹不存在则创建
         {
             folder.mkdir();
         }
-        long dataTake = System.currentTimeMillis();
-        String jpegName = savePath + dataTake + ".jpg";
+        String jpegName = savePath + "temp.jpg";
         try {
             FileOutputStream fout = new FileOutputStream(jpegName);
             BufferedOutputStream bos = new BufferedOutputStream(fout);
@@ -222,6 +232,19 @@ public class CameraPreview extends ViewGroup implements SurfaceHolder.Callback, 
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+
+        baseAPI.setImage(decodeBitmap(jpegName));
+        Message message = Message.obtain();
+        String text = baseAPI.getUTF8Text();
+        message.obj = text;
+        Log.e("main", text+"----");
+
+        handler.sendMessage(message);
+        baseAPI.clear();
+    }
+
+    private Bitmap decodeBitmap(String path){
+        return BitmapFactory.decodeFile(path);
     }
 
     private Paint paint;
@@ -229,9 +252,6 @@ public class CameraPreview extends ViewGroup implements SurfaceHolder.Callback, 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-
-
-        Log.d("position", "x=" + screenWidth / 4 + "y = " + screenHeight / 3);
         canvas.drawRoundRect(rectF, 6, 6, paint);
     }
 

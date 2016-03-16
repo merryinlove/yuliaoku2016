@@ -1,1 +1,1 @@
-include ':app','library:persistentsearchview'
+include ':app','library:tesseract','library:persistentsearchview'

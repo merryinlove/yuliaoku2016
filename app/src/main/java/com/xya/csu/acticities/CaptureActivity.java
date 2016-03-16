@@ -30,6 +30,7 @@ import android.view.animation.ScaleAnimation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.xya.csu.view.CameraPreview;
@@ -58,6 +59,7 @@ public class CaptureActivity extends Activity implements View.OnTouchListener, O
     private Camera camera;
     private Context mContext;
     private View focusIndex;
+    private TextView mainText;
     private ImageView flashBtn;
     private int mCurrentCameraId = 0; // 1是前置 0是后置
     private SurfaceView mSurfaceView;
@@ -91,11 +93,12 @@ public class CaptureActivity extends Activity implements View.OnTouchListener, O
     private void initView() {
         focusIndex = (View) findViewById(R.id.focus_index);
         mSurfaceView = (SurfaceView) findViewById(R.id.surfaceView);
+        mainText = (TextView) findViewById(R.id.main_text);
     }
 
 
     private void InitData() {
-        preview = new CameraPreview(this, mSurfaceView);
+        preview = new CameraPreview(this, mSurfaceView,mainText);
         preview.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
                 LayoutParams.MATCH_PARENT));
         ((FrameLayout) findViewById(R.id.layout)).addView(preview);
