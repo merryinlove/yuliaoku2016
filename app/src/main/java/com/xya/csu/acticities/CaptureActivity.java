@@ -32,7 +32,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.xya.csu.view.CameraGrid;
 import com.xya.csu.view.CameraPreview;
 
 import java.io.ByteArrayInputStream;
@@ -62,7 +61,6 @@ public class CaptureActivity extends Activity implements View.OnTouchListener, O
     private ImageView flashBtn;
     private int mCurrentCameraId = 0; // 1是前置 0是后置
     private SurfaceView mSurfaceView;
-    private CameraGrid mCameraGrid;
 
     private int type = 1;    //引用的矩形框
 
@@ -93,7 +91,6 @@ public class CaptureActivity extends Activity implements View.OnTouchListener, O
     private void initView() {
         focusIndex = (View) findViewById(R.id.focus_index);
         mSurfaceView = (SurfaceView) findViewById(R.id.surfaceView);
-        mCameraGrid = (CameraGrid) findViewById(R.id.camera_grid);
     }
 
 
@@ -108,20 +105,6 @@ public class CaptureActivity extends Activity implements View.OnTouchListener, O
         Bitmap mBitmap = BitmapFactory.decodeResource((this).getResources(), R.mipmap.center);
         bitmapWidth = mBitmap.getWidth();
         bitmapHeight = mBitmap.getHeight();
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (true){
-                    try {
-                        Thread.sleep(2000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    takePhoto();
-                }
-            }
-        }).start();
 
     }
 

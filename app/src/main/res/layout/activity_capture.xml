@@ -16,11 +16,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
-        <com.xya.csu.view.CameraGrid
-            android:id="@+id/camera_grid"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-
         <View
             android:id="@+id/focus_index"
             android:layout_width="40dp"
