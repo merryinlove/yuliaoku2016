@@ -232,12 +232,12 @@ public class CameraPreview extends ViewGroup implements SurfaceHolder.Callback, 
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        baseAPI.setVariable("tessedit_char_whitelist","QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm-");
 
         baseAPI.setImage(decodeBitmap(jpegName));
         Message message = Message.obtain();
         String text = baseAPI.getUTF8Text();
         message.obj = text;
-        Log.e("main", text+"----");
 
         handler.sendMessage(message);
         baseAPI.clear();
