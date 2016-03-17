@@ -1,24 +1,17 @@
 package com.xya.csu.acticities;
 
-import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.view.menu.ExpandedMenuView;
-import android.support.v7.view.menu.MenuBuilder;
-import android.support.v7.view.menu.MenuView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.View;
-import android.widget.PopupMenu;
-import android.widget.Toast;
 
 import com.xya.csu.adapter.DictAdapter;
+import com.xya.csu.listening.ListenClipboardService;
 import com.xya.csu.suggestion.SuggestBuilder;
 import com.xya.csu.utility.StatusBarUtil;
 import com.xya.csu.utility.YykDecoder;
 import com.xya.csu.utility.YykReader;
-import com.xya.csu.view.MaskPopupWindow;
 import com.xya.csu.view.MaskPopupWindowsImplement;
 import com.xya.csu.view.RecyclerViewWrapper;
 
@@ -38,6 +31,7 @@ public class WidgetActivity extends AppCompatActivity {
     private YykDecoder decoder;
     private Menu mMenu;
     private MaskPopupWindowsImplement mpwi;
+    private SharedPreferences preferences;
 
 
     @Override
@@ -82,6 +76,9 @@ public class WidgetActivity extends AppCompatActivity {
                 mpwi.show(WidgetActivity.this);
             }
         });
+        preferences = getSharedPreferences("_setting_info", 0);
+        if (preferences.getBoolean("监听粘贴板", false)) ListenClipboardService.start(this);
+
     }
 
 }

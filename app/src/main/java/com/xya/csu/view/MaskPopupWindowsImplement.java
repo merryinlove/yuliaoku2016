@@ -1,8 +1,10 @@
 package com.xya.csu.view;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.util.Log;
+import android.content.SharedPreferences;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -21,10 +23,16 @@ import java.util.Map;
  */
 public class MaskPopupWindowsImplement extends MaskPopupWindow<Void> {
 
-    public static final String[] CONSTANT = {"拍照取词", "语音搜索", "系统设置"};
+    public static final String[] CONSTANT = {"拍照取词", "系统设置"};
+    public static final String[] CHAR_SEQUENCES = {"监听粘贴板"};
+
+    private SharedPreferences preferences;
+    private boolean[] checkout = {false};
 
     public MaskPopupWindowsImplement(Context context) {
         super(context, null);
+        preferences = context.getSharedPreferences("_setting_info", 0);
+        checkout[0] = preferences.getBoolean(CHAR_SEQUENCES[0], false);
     }
 
     @Override
@@ -39,21 +47,22 @@ public class MaskPopupWindowsImplement extends MaskPopupWindow<Void> {
         select.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Log.d("position",i+"");
-                Intent intent = new Intent();
-                switch (i) {
-                    case 0:
-                        intent.setClass(context, CaptureActivity.class);
-                        break;
-                    case 1:
-                        intent.setClass(context, CaptureActivity.class);
-                        break;
-                    case 2:
-                        intent.setClass(context, CaptureActivity.class);
-                        break;
-                    default:return;
+                if (i == 0) {
+                    Intent intent = new Intent();
+                    intent.setClass(context, CaptureActivity.class);
+                    context.startActivity(intent);
+                } else {
+                    new AlertDialog.Builder(context)
+                            .setTitle("系统设置")
+                            .setMultiChoiceItems(CHAR_SEQUENCES, checkout, new DialogInterface.OnMultiChoiceClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                                    preferences.edit().putBoolean(CHAR_SEQUENCES[which], isChecked).apply();
+                                }
+                            })
+                            .setPositiveButton("确定", null)
+                            .show();
                 }
-                context.startActivity(intent);
             }
         });
         return root;

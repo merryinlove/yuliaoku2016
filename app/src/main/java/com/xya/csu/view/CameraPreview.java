@@ -31,6 +31,8 @@ import android.widget.TextView;
 import com.googlecode.tesseract.android.TessBaseAPI;
 import com.xya.csu.acticities.InitialActivity;
 import com.xya.csu.utility.ThreadPoolUtils;
+import com.xya.csu.utility.YykDecoder;
+import com.xya.csu.utility.YykReader;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -60,7 +62,8 @@ public class CameraPreview extends ViewGroup implements SurfaceHolder.Callback, 
     private volatile boolean flag = false;
     private TessBaseAPI baseAPI;
     private TextView textView;
-    RectF rectF = new RectF();
+    private YykReader yykReader;
+    private RectF rectF = new RectF();
 
     public CameraPreview(Context context, SurfaceView sv, TextView mainText) {
         super(context);
@@ -94,6 +97,8 @@ public class CameraPreview extends ViewGroup implements SurfaceHolder.Callback, 
 
         baseAPI = new TessBaseAPI();
         baseAPI.init("/sdcard/.yykdict/", "eng");
+
+        yykReader = new YykReader();
 
         ThreadPoolUtils.execute(new Runnable() {
             @Override
@@ -199,7 +204,11 @@ public class CameraPreview extends ViewGroup implements SurfaceHolder.Callback, 
         @Override
         public void handleMessage(Message msg) {
             String result = (String) msg.obj;
+            textView.setText("");
             textView.setText(result);
+            textView.append("\n");
+            String trans = yykReader.useDict("牛津英汉双解美化版",result);
+            textView.append(trans);
             super.handleMessage(msg);
         }
     };
